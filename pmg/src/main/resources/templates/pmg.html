@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/common.css">
+	<title>Insert title here</title>
+</head>
+
+<div>
+	<div class="container">
+		<!-- 로그인 페이지 -->
+		<div id="loginPage">
+			<h2>로그인</h2>
+			<div class="form-group">
+				<input type="text" placeholder="아이디">
+			</div>
+			<div class="form-group">
+				<input type="password" placeholder="비밀번호">
+			</div>
+			<div class="form-group">
+				<button>로그인</button>
+			</div>
+			<a href="#" onclick="goToRegister()">회원가입</a>
+			<a href="#" onclick="goToFindId()">아이디 찾기</a>
+			<a href="#" onclick="showForgotPasswordForm()">비밀번호 찾기</a>
+		</div>
+		<!-- 아이디 찾기 폼 -->
+		<div id="forgotUsernameForm" style="display: none;">
+			<h3>아이디 찾기</h3>
+			<div class="form-group">
+				<input type="text" placeholder="이름">
+				<input type="text" placeholder="핸드폰번호">
+			</div>
+			<div class="form-group">
+				<button>찾기</button>
+			</div>
+			<a href="#" onclick="goToRegister()">회원가입</a>
+		</div>
+		<!-- 비밀번호 찾기 폼 -->
+		<div id="forgotPasswordForm" style="display: none;">
+			<h3>비밀번호 찾기</h3>
+			<div class="form-group">
+				<input type="text" placeholder="이름">
+				<input type="text" placeholder="핸드폰번호">
+			</div>
+			<div class="form-group">
+				<button>찾기</button>
+			</div>
+		</div>
+
+
+		<!-- 회원가입 페이지 -->
+		<div id="registerPage" style="display: none;">
+			<h2>회원가입</h2>
+			<div class="form-group">
+				<input type="text" placeholder="아이디">
+			</div>
+			<div class="form-group">
+				<input type="password" placeholder="비밀번호">
+			</div>
+			<div class="form-group">
+				<input type="password" placeholder="비밀번호 확인">
+			</div>
+			<div class="form-group">
+				<button>회원가입</button>
+			</div>
+			<p>이미 계정이 있으신가요? <a href="#" onclick="goToLogin()">로그인</a></p>
+		</div>
+
+		<!-- 회원 정보 수정 페이지 -->
+		<div id="editProfilePage" style="display: none;">
+			<h2>회원정보수정</h2>
+			<div class="form-group">
+				<input type="text" placeholder="아이디">
+			</div>
+			<div class="form-group">
+				<input type="password" placeholder="비밀번호">
+			</div>
+			<div class="form-group">
+				<input type="text" placeholder="이름">
+			</div>
+			<div class="form-group">
+				<input type="text" placeholder="주소">
+			</div>
+			<div class="form-group">
+				<input type="email" placeholder="이메일">
+			</div>
+
+			<div class="form-group">
+				<button>저장</button>
+			</div>
+		</div>
+
+		<!-- 회원 상세보기 페이지 -->
+		<div class="container" id="profilePage" style="display: none;">
+			<h2>나의 계정 정보</h2>
+			<div class="form-group">
+				<label>아이디:</label>
+				<p>test1</p>
+			</div>
+			<div class="form-group">
+				<label>이름:</label>
+				<p>test</p>
+			</div>
+			<div class="form-group">
+				<label>연락처:</label>
+				<p>010-1111-1111</p>
+			</div>
+			<div class="form-group">
+				<label>이메일:</label>
+				<p>test</p>
+			</div>
+			<div class="form-group">
+				<label>주소:</label>
+				<p>test</p>
+			</div>
+			<div class="form-group">
+				<button onclick="goToEditProfile()">수정하기</button>
+			</div>
+		</div>
+
+		<!-- 게시판 리스트 페이지 -->
+		<div id="boardListPage" style="display: none;">
+			<h2>게시글</h2>
+			<ul>
+				<li><a href="#" onclick="goToBoardDetail(1)">Board 1</a></li>
+				<li><a href="#" onclick="goToBoardDetail(2)">Board 2</a></li>
+				<!-- 기타 게시글 목록 -->
+			</ul>
+		</div>
+
+		<!-- 게시판 상세보기 페이지 -->
+		<div id="boardDetailPage" style="display: none;">
+			<h2>게시글 상세페이지</h2>
+			<div class="form-group">
+				<label>제목:</label>
+				<p>test1</p>
+			</div>
+			<div class="form-group">
+				<label>내용:</label>
+				<p>내용입니다~</p>
+			</div>
+			<div class="form-group" style="display: flex; justify-content: space-between;">
+				<button onclick="goToEditBoard()">수정하기</button>
+				<button onclick="deleteBoard()">삭제하기</button>
+			</div>
+		</div>
+
+		<!-- 게시판 작성 페이지 -->
+		<div id="boardWritePage" style="display: none;">
+			<h2>게시글 작성</h2>
+			<div class="form-group">
+				<input type="text" placeholder="제목">
+			</div>
+			<div class="form-group">
+				<textarea placeholder="내용"></textarea>
+			</div>
+			<div class="form-group">
+				<button>작성하기</button>
+			</div>
+		</div>
+
+		<!-- 게시판 수정 페이지 -->
+		<div id="boardEditPage" style="display: none;">
+			<h2>게시글 편집</h2>
+			<div class="form-group">
+				<input type="text" placeholder="Title" value="제목">
+			</div>
+			<div class="form-group">
+				<textarea placeholder="Content"></textarea>
+			</div>
+			<div class="form-group">
+				<button>수정하기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	function goToRegister() {
+		document.getElementById('loginPage').style.display = 'none';
+		document.getElementById('registerPage').style.display = 'block';
+	}
+	function goToLogin() {
+		document.getElementById('registerPage').style.display = 'none';
+		document.getElementById('loginPage').style.display = 'block';
+	}
+	function goToFindId() {
+		document.getElementById('loginPage').style.display = 'none';
+		document.getElementById('forgotUsernameForm').style.display = 'block';
+	}
+	function goToEditProfile() {
+		document.getElementById('profilePage').style.display = 'none';
+		document.getElementById('editProfilePage').style.display = 'block';
+	}
+	function goToBoardDetail(boardId) {
+		document.getElementById('boardListPage').style.display = 'none';
+		document.getElementById('boardDetailPage').style.display = 'block';
+	}
+	function goToEditBoard() {
+		document.getElementById('boardDetailPage').style.display = 'none';
+		document.getElementById('boardEditPage').style.display = 'block';
+	}
+</script>
+</body>
+
+</html>
