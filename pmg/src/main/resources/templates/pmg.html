@@ -23,7 +23,7 @@
 			</div>
 			<a href="#" onclick="goToRegister()">회원가입</a>
 			<a href="#" onclick="goToFindId()">아이디 찾기</a>
-			<a href="#" onclick="showForgotPasswordForm()">비밀번호 찾기</a>
+			<a href="#" onclick="goToFindPassword()">비밀번호 찾기</a>
 		</div>
 		<!-- 아이디 찾기 폼 -->
 		<div id="forgotUsernameForm" style="display: none;">
@@ -36,6 +36,7 @@
 				<button>찾기</button>
 			</div>
 			<a href="#" onclick="goToRegister()">회원가입</a>
+			<a href="#" onclick="goToLogin()">로그인</a>
 		</div>
 		<!-- 비밀번호 찾기 폼 -->
 		<div id="forgotPasswordForm" style="display: none;">
@@ -47,6 +48,8 @@
 			<div class="form-group">
 				<button>찾기</button>
 			</div>
+			<a href="#" onclick="goToRegister()">회원가입</a>
+			<a href="#" onclick="goToLogin()">로그인</a>
 		</div>
 
 
@@ -177,32 +180,7 @@
 	</div>
 </div>
 
-<script>
-	function goToRegister() {
-		document.getElementById('loginPage').style.display = 'none';
-		document.getElementById('registerPage').style.display = 'block';
-	}
-	function goToLogin() {
-		document.getElementById('registerPage').style.display = 'none';
-		document.getElementById('loginPage').style.display = 'block';
-	}
-	function goToFindId() {
-		document.getElementById('loginPage').style.display = 'none';
-		document.getElementById('forgotUsernameForm').style.display = 'block';
-	}
-	function goToEditProfile() {
-		document.getElementById('profilePage').style.display = 'none';
-		document.getElementById('editProfilePage').style.display = 'block';
-	}
-	function goToBoardDetail(boardId) {
-		document.getElementById('boardListPage').style.display = 'none';
-		document.getElementById('boardDetailPage').style.display = 'block';
-	}
-	function goToEditBoard() {
-		document.getElementById('boardDetailPage').style.display = 'none';
-		document.getElementById('boardEditPage').style.display = 'block';
-	}
-</script>
+<script src="js/common.js"></script>
 </body>
 
 </html>
