@@ -87,8 +87,8 @@ header {
 	color: #fff;
 	padding: 10px;
 	text-align: center;
-}
 
+}
 nav {
 	display: inline-block;
 }
@@ -111,6 +111,7 @@ nav a:hover {
 }
 
 header div {
+	margin-top: 20px;
 	float: right;
 }
 

@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity(name = "userentity")
+@Entity
 @Table(name = "userentity")
 @Data
 @NoArgsConstructor
@@ -25,6 +25,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class User {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 

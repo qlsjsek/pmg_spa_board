@@ -3,6 +3,8 @@ package com.pmg.user.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pmg.exception.PasswordMismatchException;
 import com.pmg.exception.UserNotFoundException;
@@ -12,21 +14,24 @@ import com.pmg.user.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
+@Service
+@Transactional
 public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Override
 	public User createUser(UserDto userDto) {
-		User user = User.builder()
-							.userId(userDto.getUserId())
-							.userPassword(userDto.getUserPassword())
-							.userName(userDto.getUserName())
-							.userAddress(userDto.getUserAddress())
-							.userPhone(userDto.getUserPhone())
-							.userBirthDate(userDto.getUserBirthDate())
-							.build();
-		return user;
+		Optional<User> optionalUser = userRepository.findByUserId(userDto.getUserId());
+		if (optionalUser.isPresent()) {
+			throw new RuntimeException("이미 존재하는 ID 입니다.");
+		} else {
+			User user = User.builder().userId(userDto.getUserId()).userPassword(userDto.getUserPassword())
+					.userName(userDto.getUserName()).userAddress(userDto.getUserAddress())
+					.userPhone(userDto.getUserPhone()).userBirthDate(userDto.getUserBirthDate())
+					.userEmail(userDto.getUserEmail()).build();
+			return userRepository.save(user);
+		}
 	}
 
 	@Override
@@ -63,7 +68,7 @@ public class UserServiceImpl implements UserService {
 		Optional<User> optionalUser = userRepository.findByUserId(userId);
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			if (user  == null) {
+			if (user == null) {
 				UserNotFoundException exception = new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
 				exception.setData(User.builder().userId(userId).userPassword(userPassword).build());
 				throw exception;
@@ -75,7 +80,7 @@ public class UserServiceImpl implements UserService {
 				throw exception;
 			}
 			return user;
-		}else {
+		} else {
 			throw new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
 		}
 	}

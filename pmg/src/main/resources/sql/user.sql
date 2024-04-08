@@ -1,0 +1,9 @@
+insert into userentity(user_id,user_password,user_name,user_address,user_email,user_phone,user_birth_date) values('test1','test1','테스트1','경기도 화성시','test1@naver.com','010-1234-1234','960101');
+insert into userentity(user_id,user_password,user_name,user_address,user_email,user_phone,user_birth_date) values('test2','test2','테스트2','경기도 화성시','test1@naver.com','010-1234-1234','960101');
+insert into userentity(user_id,user_password,user_name,user_address,user_email,user_phone,user_birth_date) values('test3','test3','테스트3','경기도 화성시','test1@naver.com','010-1234-1234','960101');
+insert into userentity(user_id,user_password,user_name,user_address,user_email,user_phone,user_birth_date) values('test4','test4','테스트4','경기도 화성시','test1@naver.com','010-1234-1234','960101');
+insert into userentity(user_id,user_password,user_name,user_address,user_email,user_phone,user_birth_date) values('test5','test5','테스트5','경기도 화성시','test1@naver.com','010-1234-1234','960101');
+insert into userentity(user_id,user_password,user_name,user_address,user_email,user_phone,user_birth_date) values('test6','test6','테스트6','경기도 화성시','test1@naver.com','010-1234-1234','960101');
+insert into userentity(user_id,user_password,user_name,user_address,user_email,user_phone,user_birth_date) values('test7','test7','테스트7','경기도 화성시','test1@naver.com','010-1234-1234','960101');
+insert into userentity(user_id,user_password,user_name,user_address,user_email,user_phone,user_birth_date) values('test8','test8','테스트8','경기도 화성시','test1@naver.com','010-1234-1234','960101');
+insert into userentity(user_id,user_password,user_name,user_address,user_email,user_phone,user_birth_date) values('test9','test9','테스트9','경기도 화성시','test1@naver.com','010-1234-1234','960101');

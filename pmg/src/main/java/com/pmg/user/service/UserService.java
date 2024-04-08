@@ -5,11 +5,11 @@ import com.pmg.user.dto.UserDto;
 import com.pmg.user.entity.User;
 
 public interface UserService {
-	User createUser(UserDto userDto);
-	void deleteUser(Long id);
-	User updateUser(String userId, UserDto userDto);
-	User findUser(String userId);
-	User loginUser(String userId, String userPassword);
+	public User createUser(UserDto userDto);
+	public void deleteUser(Long id);
+	public User updateUser(String userId, UserDto userDto);
+	public User findUser(String userId);
+	public User loginUser(String userId, String userPassword);
 	
 	
 }

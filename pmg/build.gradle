@@ -41,7 +41,3 @@ dependencies {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
 }
-
-tasks.named('test') {
-	useJUnitPlatform()
-}
