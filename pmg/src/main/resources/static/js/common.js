@@ -30,3 +30,11 @@ function goToEditBoard() {
 	document.getElementById('boardDetailPage').style.display = 'none';
 	document.getElementById('boardEditPage').style.display = 'block';
 }
+function goToWriteBoard(){
+	document.getElementById('boardListPage').style.display = 'none';
+	document.getElementById('boardWritePage').style.display = 'block';
+}
+function cancelWriteBoard(){
+	document.getElementById('boardWritePage').style.display = 'none';
+	document.getElementById('boardListPage').style.display = 'block';
+}
