@@ -54,12 +54,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findUser(String userId) {
+	public User findUserByUserId(String userId) {
 		Optional<User> optionalUser = userRepository.findByUserId(userId);
 		if (optionalUser.isPresent()) {
 			return optionalUser.get();
 		} else {
 			throw new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
+		}
+	}
+	@Override
+	public User findUserById(Long id) {
+		Optional<User> optionalUser = userRepository.findById(id);
+		if (optionalUser.isPresent()) {
+			return optionalUser.get();
+		} else {
+			throw new UserNotFoundException(id + " 는 존재하지않습니다.");
 		}
 	}
 
@@ -84,5 +93,12 @@ public class UserServiceImpl implements UserService {
 			throw new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
 		}
 	}
+
+	@Override
+	public boolean isUserIdDuplicate(String userId) {
+		Optional<User> optionalUser = userRepository.findByUserId(userId);
+		return optionalUser.isPresent();
+	}
+
 
 }

@@ -1,42 +1,27 @@
-function goToRegister() {
-	document.getElementById('loginPage').style.display = 'none';
-	document.getElementById('forgotUsernameForm').style.display = 'none';
-	document.getElementById('forgotPasswordForm').style.display = 'none';
-	document.getElementById('boardListPage').style.display = 'none';
-	document.getElementById('registerPage').style.display = 'block';
+function goToPage(pageId) {
+	const pages = ['loginPage', 'forgotUsernameForm', 'forgotPasswordForm', 'boardListPage', 'registerPage', 'profilePage', 'editProfilePage', 'boardDetailPage', 'boardEditPage', 'boardWritePage'];
+
+
+	pages.forEach(page => {
+		const element = document.getElementById(page);
+		if (element) {
+			element.style.display = 'none';
+		}
+	});
+
+	const pageElement = document.getElementById(pageId);
+	if (pageElement) {
+		pageElement.style.display = 'block';
+	}
 }
 function goToLogin() {
-	document.getElementById('registerPage').style.display = 'none';
-		document.getElementById('forgotUsernameForm').style.display = 'none';
-	document.getElementById('forgotPasswordForm').style.display = 'none';
-	document.getElementById('boardListPage').style.display = 'none';
-	document.getElementById('loginPage').style.display = 'block';
+	goToPage('loginPage');
 }
-function goToFindId() {
-	document.getElementById('loginPage').style.display = 'none';
-	document.getElementById('forgotUsernameForm').style.display = 'block';
+
+function goToRegister() {
+	goToPage('registerPage');
 }
-function goToFindPassword() {
-	document.getElementById('loginPage').style.display = 'none';
-	document.getElementById('forgotPasswordForm').style.display = 'block';
-}
-function goToEditProfile() {
-	document.getElementById('profilePage').style.display = 'none';
-	document.getElementById('editProfilePage').style.display = 'block';
-}
-function goToBoardDetail(boardId) {
-	document.getElementById('boardListPage').style.display = 'none';
-	document.getElementById('boardDetailPage').style.display = 'block';
-}
-function goToEditBoard() {
-	document.getElementById('boardDetailPage').style.display = 'none';
-	document.getElementById('boardEditPage').style.display = 'block';
-}
-function goToWriteBoard(){
-	document.getElementById('boardListPage').style.display = 'none';
-	document.getElementById('boardWritePage').style.display = 'block';
-}
-function cancelWriteBoard(){
-	document.getElementById('boardWritePage').style.display = 'none';
-	document.getElementById('boardListPage').style.display = 'block';
+
+function goToProfilePage() {
+	goToPage('goToProfilePage');
 }

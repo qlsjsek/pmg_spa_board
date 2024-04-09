@@ -60,7 +60,7 @@ public class UserServiceImplTest extends PmgApplicationTests {
 	@Disabled
 	@Rollback(false)
 	void findUser() {
-		User user = userService.findUser("test1");
+		User user = userService.findUserByUserId("test1");
 		System.out.println("유저 정보 조회 --> " + user);
 	}
 	

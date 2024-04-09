@@ -11,7 +11,7 @@
 <body>
 	<header>
 		<nav>
-			<a href="#">전체</a>
+			<a href="#" onclick="goToBoardList()">전체</a>
 			<a href="#">자유</a>
 			<a href="#">질문</a>
 			<a href="#">기타</a>
@@ -19,6 +19,7 @@
 		<div>
 			<a href="#" onclick="goToRegister()">회원가입</a>
 			<a href="#" onclick="goToLogin()">로그인</a>
+			<a href="#" onclick="goToProfilePage()">마이페이지</a>
 		</div>
 	</header>
 
@@ -28,13 +29,13 @@
 			<div id="loginPage" style="display: none;">
 				<h2>로그인</h2>
 				<div class="form-group">
-					<input type="text" placeholder="아이디">
+					<input type="text" id="loginUserId" placeholder="아이디">
 				</div>
 				<div class="form-group">
-					<input type="password" placeholder="비밀번호">
+					<input type="password" id="loginUserPassword" placeholder="비밀번호">
 				</div>
 				<div class="form-group">
-					<button>로그인</button>
+					<button onclick = "login()">로그인</button>
 				</div>
 				<a href="#" onclick="goToRegister()">회원가입</a>
 				<a href="#" onclick="goToFindId()">아이디 찾기</a>
@@ -76,16 +77,32 @@
 			<div id="registerPage" style="display: none;">
 				<h2>회원가입</h2>
 				<div class="form-group">
-					<input type="text" placeholder="아이디">
+					<input type="text" id="userId" placeholder="아이디">
+					<button onclick="checkDuplicate()">중복 확인</button>
 				</div>
 				<div class="form-group">
-					<input type="password" placeholder="비밀번호">
+					<input type="password" id="userPassword" placeholder="비밀번호">
 				</div>
 				<div class="form-group">
-					<input type="password" placeholder="비밀번호 확인">
+					<input type="password" id="confirmPassword" placeholder="비밀번호 확인">
 				</div>
 				<div class="form-group">
-					<button>회원가입</button>
+					<input type="text" id="userName" placeholder="이름">
+				</div>
+				<div class="form-group">
+					<input type="text" id="userBirthDate" placeholder="생년월일">
+				</div>
+				<div class="form-group">
+					<input type="text" id="userPhone" placeholder="핸드폰번호">
+				</div>
+				<div class="form-group">
+					<input type="text" id="userAddress" placeholder="주소">
+				</div>
+				<div class="form-group">
+					<input type="text" id="userEmail" placeholder="이메일">
+				</div>
+				<div class="form-group">
+					<button id="signUpButton" onclick="signUp()">회원가입</button>
 				</div>
 				<p>이미 계정이 있으신가요? <a href="#" onclick="goToLogin()">로그인</a></p>
 			</div>
@@ -227,6 +244,7 @@
 </body>
 
 <script src="js/common.js"></script>
+<script src="js/user.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
