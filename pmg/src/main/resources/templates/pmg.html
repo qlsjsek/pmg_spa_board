@@ -17,15 +17,16 @@
 			<a href="#">기타</a>
 		</nav>
 		<div>
-			<a href="#" onclick="goToRegister()">회원가입</a>
-			<a href="#" onclick="goToLogin()">로그인</a>
-			<a href="#" onclick="goToProfilePage()">마이페이지</a>
+			<a href="#" id="register" th:if="${session.loginUser == null}" onclick="goToRegister()">회원가입</a>
+			<a href="#" id="login" th:if="${session.loginUser == null}" onclick="goToLogin()">로그인</a>
+			<a href="#" id="logout" th:if="${session.loginUser != null}" onclick="logout()">로그아웃</a>
+			<a href="#" th:if="${session.loginUser != null}" onclick="goToProfilePage()">마이페이지</a>
 		</div>
 	</header>
 
 	<div>
 		<div class="container">
-			<!-- 로그인 페이지 -->
+			<!-- 로그인 -->
 			<div id="loginPage" style="display: none;">
 				<h2>로그인</h2>
 				<div class="form-group">
@@ -35,14 +36,14 @@
 					<input type="password" id="loginUserPassword" placeholder="비밀번호">
 				</div>
 				<div class="form-group">
-					<button onclick = "login()">로그인</button>
+					<button onclick="login()">로그인</button>
 				</div>
 				<a href="#" onclick="goToRegister()">회원가입</a>
 				<a href="#" onclick="goToFindId()">아이디 찾기</a>
 				<a href="#" onclick="goToFindPassword()">비밀번호 찾기</a>
 			</div>
-			<!-- 아이디 찾기 폼 -->
-			<div id="forgotUsernameForm" style="display: none;">
+			<!-- 아이디 찾기 -->
+			<div id="forgotUserIdForm" style="display: none;">
 				<h2>아이디 찾기</h2>
 				<div class="form-group">
 					<input type="text" placeholder="이름">
@@ -56,7 +57,7 @@
 				<a href="#" onclick="goToRegister()">회원가입</a>
 				<a href="#" onclick="goToLogin()">로그인</a>
 			</div>
-			<!-- 비밀번호 찾기 폼 -->
+			<!-- 비밀번호 찾기  -->
 			<div id="forgotPasswordForm" style="display: none;">
 				<h2>비밀번호 찾기</h2>
 				<div class="form-group">
@@ -73,7 +74,7 @@
 			</div>
 
 
-			<!-- 회원가입 페이지 -->
+			<!-- 회원가입  -->
 			<div id="registerPage" style="display: none;">
 				<h2>회원가입</h2>
 				<div class="form-group">
@@ -107,59 +108,74 @@
 				<p>이미 계정이 있으신가요? <a href="#" onclick="goToLogin()">로그인</a></p>
 			</div>
 
-			<!-- 회원 정보 수정 페이지 -->
-			<div id="editProfilePage" style="display: none;">
+			<!-- 회원 정보 수정  -->
+			<div id="editProfilePage" style="display: none;" th:if="${loginUser != null}">
 				<h2>회원정보수정</h2>
+				<input type = "hidden" id="confirmUserPassword" th:value="${loginUser.userPassword}">
 				<div class="form-group">
-					<input type="text" placeholder="아이디">
+					<input type="text" th:value="${loginUser.userId}" placeholder="아이디" readonly>
 				</div>
 				<div class="form-group">
-					<input type="password" placeholder="비밀번호">
+					<input type="password" id="beforeUpdateUserPassword" placeholder="이전 비밀번호">
+					<button onclick="confirmPassword()">비밀번호 인증</button>
 				</div>
 				<div class="form-group">
-					<input type="text" placeholder="이름">
+					<input type="password" placeholder="변경할 비밀번호">
 				</div>
 				<div class="form-group">
-					<input type="text" placeholder="주소">
+					<input type="password" placeholder="변경할 비밀번호 확인">
 				</div>
 				<div class="form-group">
-					<input type="text" placeholder="이메일">
+					<input type="text" th:value="${loginUser.userName}" placeholder="이름" readonly>
+				</div>
+				<div class="form-group">
+					<input type="text" th:value="${loginUser.userBirthDate}" placeholder="생년월일" readonly>
+				</div>
+				<div class="form-group">
+					<input type="text" th:value="${loginUser.userPhone}" placeholder="핸드폰번호">
+				</div>
+				<div class="form-group">
+					<input type="text" th:value="${loginUser.userAddress}" placeholder="주소">
+				</div>
+				<div class="form-group">
+					<input type="text" th:value="${loginUser.userEmail}" placeholder="이메일">
 				</div>
 
 				<div class="form-group">
 					<button>저장</button>
 				</div>
 			</div>
-
-			<!-- 회원 상세보기 페이지 -->
-			<div class="container" id="profilePage" style="display: none;">
+			<!-- 회원 상세보기  -->
+			<div class="container" id="profilePage" style="display: none;" th:if="${loginUser != null}">
+				<input type="hidden" id="id" th:value="${loginUser.id}">
 				<h2>나의 계정 정보</h2>
 				<div class="form-group">
 					<label>아이디:</label>
-					<p>test1</p>
+					<p th:text="${loginUser.userId}"></p>
 				</div>
 				<div class="form-group">
 					<label>이름:</label>
-					<p>test</p>
+					<p th:text="${loginUser.userName}"></p>
 				</div>
 				<div class="form-group">
 					<label>연락처:</label>
-					<p>010-1111-1111</p>
+					<p th:text="${loginUser.userPhone}"></p>
 				</div>
 				<div class="form-group">
 					<label>이메일:</label>
-					<p>test</p>
+					<p th:text="${loginUser.userEmail}"></p>
 				</div>
 				<div class="form-group">
 					<label>주소:</label>
-					<p>test</p>
+					<p th:text="${loginUser.userAddress}"></p>
 				</div>
 				<div class="form-group">
 					<button onclick="goToEditProfile()">수정하기</button>
+					<button onclick="deleteUser()">회원 탈퇴하기</button>
 				</div>
 			</div>
 
-			<!-- 게시판 리스트 페이지 -->
+			<!-- 게시판 리스트  -->
 			<div id="boardListPage" style="display: block;">
 				<h2>게시글</h2>
 				<div class="search-container">
@@ -186,14 +202,13 @@
 						<a href="#" onclick="goToBoardDetail(2)">제목</a>
 						<span class="board-author">작성자2</span>
 					</li>
-					<!-- 기타 게시글 목록 -->
 				</ul>
 				<div class="form-group">
 					<button onclick="goToWriteBoard()">작성하기</button>
 				</div>
 			</div>
 
-			<!-- 게시판 상세보기 페이지 -->
+			<!-- 게시판 상세보기  -->
 			<div id="boardDetailPage" style="display: none;">
 				<h2>게시글 상세페이지</h2>
 				<div class="form-group">
@@ -210,7 +225,7 @@
 				</div>
 			</div>
 
-			<!-- 게시판 작성 페이지 -->
+			<!-- 게시판 작성  -->
 			<div id="boardWritePage" style="display: none;">
 				<h2>게시글 작성</h2>
 				<div class="form-group">
@@ -226,7 +241,7 @@
 
 			</div>
 
-			<!-- 게시판 수정 페이지 -->
+			<!-- 게시판 수정  -->
 			<div id="boardEditPage" style="display: none;">
 				<h2>게시글 편집</h2>
 				<div class="form-group">

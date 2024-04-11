@@ -12,6 +12,7 @@ public interface UserService {
 	public User findUserById(Long id);
 	public User loginUser(String userId, String userPassword);
 	public boolean isUserIdDuplicate(String userId);
+	public boolean isPasswordConfirm(String userPassword);
 	
 	
 }

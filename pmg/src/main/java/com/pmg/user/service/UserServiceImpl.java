@@ -100,5 +100,11 @@ public class UserServiceImpl implements UserService {
 		return optionalUser.isPresent();
 	}
 
+	@Override
+	public boolean isPasswordConfirm(String userPassword) {
+		Optional<User> optionalUser = userRepository.findByUserPassword(userPassword);
+		return optionalUser.isPresent();
+	}
+
 
 }

@@ -1,6 +1,7 @@
 package com.pmg.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmg.user.dto.UserDto;
 import com.pmg.user.entity.User;
 import com.pmg.user.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 
 @RestController
@@ -30,19 +32,31 @@ public class UserRestController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<UserDto> loginUser(@RequestBody UserDto userDto){
+	public ResponseEntity<UserDto> loginUser(@RequestBody UserDto userDto, HttpSession session){
 		User loginUser = userService.loginUser(userDto.getUserId(), userDto.getUserPassword());
-		UserDto dto = UserDto.toDto(loginUser);
-		return ResponseEntity.ok(dto);
+		if (loginUser != null) {
+			session.setAttribute("loginUser", loginUser);
+			UserDto dto = UserDto.toDto(loginUser);
+			return ResponseEntity.ok(dto);
+		}else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<?> logoutUser(HttpSession session) {
+		session.invalidate();
+		return ResponseEntity.ok().build();
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<String> deleteUser(@PathVariable(value = "id") Long id, HttpSession session) {
 		User user = userService.findUserById(id);
 		if (user == null) {
 			return ResponseEntity.notFound().build();
 		} else {
 			userService.deleteUser(id);
+			session.invalidate();
 			return ResponseEntity.ok("계정 탈퇴 완료!");
 		}
 	}
@@ -66,5 +80,11 @@ public class UserRestController {
 	public ResponseEntity<Boolean> checkDuplicationUserId(@PathVariable("userId") String userId) {
 		boolean duplicate = userService.isUserIdDuplicate(userId);
 		return ResponseEntity.ok(duplicate);
+	}
+	
+	@GetMapping("/confirm/{userPassword}")
+	public ResponseEntity<Boolean> isPasswordConfirm(@PathVariable("userPassword") String userPassword) {
+		boolean confirm = userService.isPasswordConfirm(userPassword);
+		return ResponseEntity.ok(confirm);
 	}
 }
