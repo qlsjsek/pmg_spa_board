@@ -97,15 +97,70 @@ function checkDuplicate() {
 			isDuplicateChecked = false;
 		});
 }
+//회원정보수정
+let checkConfirmPassword = false;
+function updateUser() {
+	var userId = document.getElementById('updateUserId').value;
+	var password = document.getElementById('updatePassword').value;
+	var confirmPassword = document.getElementById('updateConfirmPassword').value;
+	var address = document.getElementById('updateUserAddress').value;
+	var email = document.getElementById('updateUserEmail').value;
+	var phone = document.getElementById('updateUserPhone').value;
 
+	if (!password || !confirmPassword) {
+		alert('변경할 비밀번호를 입력해주세요');
+		return;
+	}
+
+
+	if (password !== confirmPassword) {
+		alert('비밀번호가 일치하지 않습니다');
+		return;
+	}
+
+	if (!checkConfirmPassword) {
+		alert('비밀번호 인증을 해주세요');
+		return;
+	}
+
+	fetch('/api/user/update/' + userId, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			userPassword: password,
+			userAddress: address,
+			userEmail: email,
+			userPhone: phone
+		})
+	})
+		.then(response => {
+			if (response.ok) {
+				alert('회원 정보 업데이트 성공');
+				checkConfirmPassword = false;
+				document.getElementById('editProfilePage').style.display = 'none';
+				document.getElementById('profilePage').style.display = 'block';
+			} else {
+				throw new Error('회원 정보 업데이트 실패');
+			}
+		})
+		.catch(error => {
+			console.error('Error : ', error);
+			alert('회원 정보 업데이트 실패');
+		})
+}
+
+//회원정보수정 비밀번호 인증
 function confirmPassword() {
+	var userId = document.getElementById('updateUserId').value;
 	var confirmUserPassword = document.getElementById('confirmUserPassword').value;
 	var userPassword = document.getElementById('beforeUpdateUserPassword').value;
 	if (!userPassword) {
 		alert('비밀번호를 입력해주세요');
 		return;
 	}
-	fetch('/api/user/confirm/' + userPassword)
+	fetch(`/api/user/confirm/${userId}/${userPassword}`)
 		.then(response => {
 			if (response.ok) {
 				return response.json();
@@ -117,11 +172,15 @@ function confirmPassword() {
 			if (data === true) {
 				if (userPassword === confirmUserPassword) {
 					alert('비밀번호가 일치합니다. 인증 성공!');
+					checkConfirmPassword = true;
+
 				} else {
 					alert('비밀번호가 일치하지 않습니다.');
+					checkConfirmPassword = false;
 				}
 			} else {
 				alert('비밀번호가 일치하지 않습니다.');
+				checkConfirmPassword = false;
 			}
 		})
 		.catch(error => {
@@ -216,6 +275,96 @@ function deleteUser() {
 		.catch(error => {
 			console.error('회원 탈퇴 요청 실패 : ', error);
 		})
+}
+
+//아이디 찾기
+function findUserId() {
+	var userName = document.getElementById('findUserName').value;
+	var userPhone = document.getElementById('findUserPhone').value;
+
+	if (!userName) {
+		alert('이름을 입력해주세요');
+		return;
+	}
+	if (!userPhone) {
+		alert('핸드폰 번호를 입력해주세요');
+		return;
+	}
+	var url = new URL(`/api/user/find/userId`, window.location.origin);
+    url.searchParams.append('userName', userName);
+    url.searchParams.append('userPhone', userPhone);
+    
+	fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+		.then(response => {
+			if (response.status === 200) {
+				return response.text();
+			} else {
+				return Promise.reject('해당 아이디를 찾을 수 없습니다.');
+			}
+		})
+		.then(data => {
+			alert('회원님의 아이디는 : ' + data + ' 입니다.');
+			document.getElementById("findUserName").value = '';
+			document.getElementById("findUserPhone").value = '';
+			document.getElementById('forgotUserIdForm').style.display = 'none';
+			document.getElementById('loginPage').style.display = 'block';
+		})
+		.catch(error => {
+			alert('해당 아이디를 찾을 수 없습니다');
+			console.error('Error : ' + error);
+			document.getElementById("findUserName").value = '';
+			document.getElementById("findUserPhone").value = '';
+		});
+}
+
+//비밀번호 찾기
+function findUserPassword() {
+	var userId = document.getElementById('findUserId').value;
+	var userPhone = document.getElementById('findUserPwPhone').value;
+
+	if (!userId) {
+		alert('아이디를 입력해주세요');
+		return;
+	}
+	if (!userPhone) {
+		alert('핸드폰 번호를 입력해주세요');
+		return;
+	}
+	var url = new URL(`/api/user/find/userPassword`, window.location.origin);
+    url.searchParams.append('userId', userId);
+    url.searchParams.append('userPhone', userPhone);
+
+	fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+		.then(response => {
+			if (response.status === 200) {
+				return response.text();
+			} else {
+				return Promise.reject('해당 아이디를 찾을 수 없습니다.');
+			}
+		})
+		.then(data => {
+			alert('회원님의 비밀번호는 : ' + data + ' 입니다.');
+			document.getElementById("findUserId").value = '';
+			document.getElementById("findUserPwPhone").value = '';
+			document.getElementById('forgotPasswordForm').style.display = 'none';
+			document.getElementById('loginPage').style.display = 'block';
+		})
+		.catch(error => {
+			alert('해당 아이디를 찾을 수 없습니다');
+			console.error('Error : ' + error);
+			document.getElementById("findUserId").value = '';
+			document.getElementById("findUserPwPhone").value = '';
+		});
 }
 
 

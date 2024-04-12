@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
 			throw new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
 		}
 	}
+
 	@Override
 	public User findUserById(Long id) {
 		Optional<User> optionalUser = userRepository.findById(id);
@@ -101,10 +102,41 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean isPasswordConfirm(String userPassword) {
-		Optional<User> optionalUser = userRepository.findByUserPassword(userPassword);
-		return optionalUser.isPresent();
+	public boolean isPasswordConfirmByUserId(String userId, String userPassword) {
+		Optional<User> optionalUser = userRepository.findByUserId(userId);
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			String password = user.getUserPassword();
+			if (userPassword.equals(password)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			throw new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
+		}
 	}
 
+	@Override
+	public String findUserIdByUserNameAndUserPhone(String userName, String userPhone) {
+		Optional<User> optionalUser = userRepository.findUserIdByUserNameAndUserPhone(userName, userPhone);
+		if (optionalUser.isPresent()) {
+			String userId = optionalUser.get().getUserId();
+			return userId;
+		} else {
+			throw new RuntimeException("사용자를 찾을 수 없습니다.");
+		}
+	}
+
+	@Override
+	public String findUserPasswordByUserIdAndUserPhone(String userId, String userPhone) {
+		Optional<User> optionalUser = userRepository.findUserPasswordByUserIdAndUserPhone(userId, userPhone);
+		if (optionalUser.isPresent()) {
+			String userPassword = optionalUser.get().getUserPassword();
+			return userPassword;
+		} else {
+			throw new RuntimeException("사용자를 찾을 수 없습니다.");
+		}
+	}
 
 }

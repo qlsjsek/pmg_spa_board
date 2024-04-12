@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmg.user.dto.UserDto;
@@ -82,9 +83,32 @@ public class UserRestController {
 		return ResponseEntity.ok(duplicate);
 	}
 	
-	@GetMapping("/confirm/{userPassword}")
-	public ResponseEntity<Boolean> isPasswordConfirm(@PathVariable("userPassword") String userPassword) {
-		boolean confirm = userService.isPasswordConfirm(userPassword);
-		return ResponseEntity.ok(confirm);
+	@GetMapping("/confirm/{userId}/{userPassword}")
+	public ResponseEntity<Boolean> isPasswordConfirm(@PathVariable("userId") String userId, @PathVariable("userPassword") String userPassword) {
+		boolean isPasswordMatch = userService.isPasswordConfirmByUserId(userId, userPassword);
+		return ResponseEntity.ok(isPasswordMatch);
 	}
+	
+	@GetMapping("/find/userId")
+	public ResponseEntity<String> findUserIdByUserNameAndUserPhone(@RequestParam("userName") String userName, @RequestParam("userPhone") String userPhone) {
+		String userId = userService.findUserIdByUserNameAndUserPhone(userName, userPhone);
+		if (userId != null && !userId.isEmpty()) {
+			return ResponseEntity.ok(userId);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+		}
+	}
+	
+	@GetMapping("/find/userPassword")
+	public ResponseEntity<String> findUserPasswordByUserIdAndUserPhone(@RequestParam("userId") String userId, @RequestParam("userPhone") String userPhone) {
+		String userPassword = userService.findUserPasswordByUserIdAndUserPhone(userId, userPhone);
+		if (userPassword != null && !userPassword.isEmpty()) {
+			return ResponseEntity.ok(userPassword);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+		}
+	}
+	
+	
+	
 }

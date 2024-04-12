@@ -66,12 +66,33 @@ public class UserServiceImplTest extends PmgApplicationTests {
 	
 	@Test
 	@Transactional
-	//@Disabled
+	@Disabled
 	@Rollback(false)
 	void loginUser() {
 		User user = userService.loginUser("test2", "6666");
 		System.out.println("로그인 확인 --> " + user);
 		
+	}
+	
+	@Test
+	@Transactional
+	//@Disabled
+	@Rollback(false)
+	void findUserId() {
+		String userName = "123";
+		String userPhone = "123";
+		String userId  = userService.findUserIdByUserNameAndUserPhone(userName, userPhone);
+		System.out.println("찾은 아이디 : " + userId);
+	}
+	@Test
+	@Transactional
+	//@Disabled
+	@Rollback(false)
+	void findUserPassword() {
+		String userId = "1111";
+		String userPhone = "123";
+		String userPassword  = userService.findUserPasswordByUserIdAndUserPhone(userId, userPhone);
+		System.out.println("찾은 비밀번호 : " + userPassword);
 	}
 	
 }
