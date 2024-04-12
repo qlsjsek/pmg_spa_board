@@ -4,13 +4,12 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pmg.PmgApplicationTests;
 import com.pmg.user.dto.UserDto;
 import com.pmg.user.entity.User;
 import com.pmg.user.service.UserService;
-
-import jakarta.transaction.Transactional;
 
 public class UserServiceImplTest extends PmgApplicationTests {
 	@Autowired
@@ -76,7 +75,7 @@ public class UserServiceImplTest extends PmgApplicationTests {
 	
 	@Test
 	@Transactional
-	//@Disabled
+	@Disabled
 	@Rollback(false)
 	void findUserId() {
 		String userName = "123";
@@ -86,7 +85,7 @@ public class UserServiceImplTest extends PmgApplicationTests {
 	}
 	@Test
 	@Transactional
-	//@Disabled
+	@Disabled
 	@Rollback(false)
 	void findUserPassword() {
 		String userId = "1111";

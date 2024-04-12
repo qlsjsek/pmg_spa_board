@@ -1,5 +1,6 @@
 function goToPage(pageId) {
-	const pages = ['loginPage', 'forgotUserIdForm', 'forgotPasswordForm', 'boardListPage', 'registerPage', 'profilePage', 'editProfilePage', 'boardDetailPage', 'boardEditPage', 'boardWritePage'];
+	const pages = ['loginPage', 'forgotUserIdForm', 'forgotPasswordForm', 'boardListPage', 'registerPage', 'profilePage', 
+	'editProfilePage', 'boardDetailPage', 'boardEditPage', 'boardWritePage', 'boardQuestionListPage', 'boardFreeListPage','boardRestListPage'];
 
 
 	pages.forEach(page => {
@@ -54,4 +55,16 @@ function goToBoardList() {
 
 function goToEditProfile() {
 	goToPage('editProfilePage');
+}
+function goToWriteBoard() {
+	goToPage('boardWritePage');
+}
+function goToBoardQuestionList() {
+	goToPage('boardQuestionListPage');
+}
+function goToBoardFreeList() {
+	goToPage('boardFreeListPage');
+}
+function goToBoardRestList() {
+	goToPage('boardRestListPage');
 }

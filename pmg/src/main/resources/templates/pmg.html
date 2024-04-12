@@ -11,10 +11,10 @@
 <body>
 	<header>
 		<nav>
-			<a href="#" onclick="goToBoardList()">전체</a>
-			<a href="#">자유</a>
-			<a href="#">질문</a>
-			<a href="#">기타</a>
+			<a href="#" onclick="goToBoardList()" th:text="${categories[0].categoryName}"></a>
+			<a href="#" onclick="goToBoardFreeList()"  th:text="${categories[1].categoryName}"></a>
+			<a href="#" onclick="goToBoardQuestionList()" th:text="${categories[2].categoryName}"></a>
+			<a href="#" onclick="goToBoardRestList()" th:text="${categories[3].categoryName}"></a>
 		</nav>
 		<div>
 			<a href="#" id="register" th:if="${session.loginUser == null}" onclick="goToRegister()">회원가입</a>
@@ -111,7 +111,7 @@
 			<!-- 회원 정보 수정  -->
 			<div id="editProfilePage" style="display: none;" th:if="${loginUser != null}">
 				<h2>회원정보수정</h2>
-				<input type = "hidden" id="confirmUserPassword" th:value="${loginUser.userPassword}">
+				<input type="hidden" id="confirmUserPassword" th:value="${loginUser.userPassword}">
 				<div class="form-group">
 					<input type="text" id="updateUserId" th:value="${loginUser.userId}" placeholder="아이디" disabled>
 				</div>
@@ -129,7 +129,8 @@
 					<input type="text" id="updateUserName" th:value="${loginUser.userName}" placeholder="이름" disabled>
 				</div>
 				<div class="form-group">
-					<input type="text" id="updateUserBirthDate" th:value="${loginUser.userBirthDate}" placeholder="생년월일" disabled>
+					<input type="text" id="updateUserBirthDate" th:value="${loginUser.userBirthDate}" placeholder="생년월일"
+						disabled>
 				</div>
 				<div class="form-group">
 					<input type="text" id="updateUserPhone" th:value="${loginUser.userPhone}" placeholder="핸드폰번호">
@@ -142,7 +143,7 @@
 				</div>
 
 				<div class="form-group">
-					<button onclick ="updateUser()">저장</button>
+					<button onclick="updateUser()">저장</button>
 				</div>
 			</div>
 			<!-- 회원 상세보기  -->
@@ -158,6 +159,10 @@
 					<p th:text="${loginUser.userName}"></p>
 				</div>
 				<div class="form-group">
+					<label>생년월일:</label>
+					<p th:text="${loginUser.userBirthDate}"></p>
+				</div>
+				<div class="form-group">
 					<label>연락처:</label>
 					<p th:text="${loginUser.userPhone}"></p>
 				</div>
@@ -170,14 +175,114 @@
 					<p th:text="${loginUser.userAddress}"></p>
 				</div>
 				<div class="form-group">
+					<label>가입날짜:</label>
+					<p th:text="${#temporals.format(loginUser.createdTime, 'yyyy/MM/dd')}"></p>
+				</div>
+				<div class="form-group">
 					<button onclick="goToEditProfile()">수정하기</button>
 					<button onclick="deleteUser()">회원 탈퇴하기</button>
 				</div>
 			</div>
 
-			<!-- 게시판 리스트  -->
+			<!-- 게시판 전체 리스트  -->
 			<div id="boardListPage" style="display: block;">
-				<h2>게시글</h2>
+				<h2>전체 게시글</h2>
+				<div class="search-container">
+					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+					<button onclick="searchBoard()">검색</button>
+				</div>
+				<ul>
+					<li>
+						<span class="board-number-category">번호</span>
+						<span class="board-title-category">제목</span>
+						<span class="board-author-category">작성자</span>
+						<span class="board-good-category">추천</span>
+						<span class="board-readCount-category">조회수</span>
+					</li>
+					<li>
+						<span class="board-number">1</span>
+						<a href="#" onclick="goToBoardDetail(1)">제목</a>
+						<span class="board-author">작성자1</span>
+						<span class="board-good">10</span>
+						<span class="board-readCount">10</span>
+					</li>
+					<li>
+						<span class="board-number">2</span>
+						<a href="#" onclick="goToBoardDetail(2)">제목</a>
+						<span class="board-author">작성자2</span>
+					</li>
+				</ul>
+				<div class="form-group">
+					<button onclick="goToWriteBoard()">작성하기</button>
+				</div>
+			</div>
+			<!-- 게시판 자유 리스트  -->
+			<div id="boardFreeListPage" style="display: none;">
+				<h2>자유 게시글</h2>
+				<div class="search-container">
+					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+					<button onclick="searchBoard()">검색</button>
+				</div>
+				<ul>
+					<li>
+						<span class="board-number-category">번호</span>
+						<span class="board-title-category">제목</span>
+						<span class="board-author-category">작성자</span>
+						<span class="board-good-category">추천</span>
+						<span class="board-readCount-category">조회수</span>
+					</li>
+					<li>
+						<span class="board-number">1</span>
+						<a href="#" onclick="goToBoardDetail(1)">제목</a>
+						<span class="board-author">작성자1</span>
+						<span class="board-good">10</span>
+						<span class="board-readCount">10</span>
+					</li>
+					<li>
+						<span class="board-number">2</span>
+						<a href="#" onclick="goToBoardDetail(2)">제목</a>
+						<span class="board-author">작성자2</span>
+					</li>
+				</ul>
+				<div class="form-group">
+					<button onclick="goToWriteBoard()">작성하기</button>
+				</div>
+			</div>
+			<!-- 게시판 질문 리스트  -->
+			<div id="boardQuestionListPage" style="display: none;">
+				<h2>질문 게시글</h2>
+				<div class="search-container">
+					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+					<button onclick="searchBoard()">검색</button>
+				</div>
+				<ul>
+					<li>
+						<span class="board-number-category">번호</span>
+						<span class="board-title-category">제목</span>
+						<span class="board-author-category">작성자</span>
+						<span class="board-good-category">추천</span>
+						<span class="board-readCount-category">조회수</span>
+					</li>
+					<li>
+						<span class="board-number">1</span>
+						<a href="#" onclick="goToBoardDetail(1)">제목</a>
+						<span class="board-author">작성자1</span>
+						<span class="board-good">10</span>
+						<span class="board-readCount">10</span>
+					</li>
+					<li>
+						<span class="board-number">2</span>
+						<a href="#" onclick="goToBoardDetail(2)">제목</a>
+						<span class="board-author">작성자2</span>
+					</li>
+				</ul>
+				<div class="form-group">
+					<button onclick="goToWriteBoard()">작성하기</button>
+				</div>
+			</div>
+			<!-- 게시판 기타 리스트  -->
+			<div id="boardRestListPage" style="display: none;">
+				<h2>기타 게시글</h2>
 				<div class="search-container">
 					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
 					<button onclick="searchBoard()">검색</button>
@@ -229,6 +334,14 @@
 			<div id="boardWritePage" style="display: none;">
 				<h2>게시글 작성</h2>
 				<div class="form-group">
+					<label for="categorySelect">카테고리:</label>
+					<select id="categorySelect">
+						<option th:text=${categories[1].categoryName}></option>
+						<option th:text=${categories[2].categoryName}></option>
+						<option th:text=${categories[3].categoryName}></option>
+					</select>
+				</div>
+				<div class="form-group">
 					<input type="text" placeholder="제목">
 				</div>
 				<div class="form-group">
@@ -238,7 +351,6 @@
 					<button>작성</button>
 					<button onclick="cancelWriteBoard()">취소</button>
 				</div>
-
 			</div>
 
 			<!-- 게시판 수정  -->
