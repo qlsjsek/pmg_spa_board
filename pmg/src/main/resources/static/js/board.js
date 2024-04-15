@@ -46,8 +46,10 @@ function createBoard() {
 function goToBoardDetail(event) {
 	const boardId = event.target.getAttribute('data-board-id');
 	const boardTitle = event.target.textContent;
-	const contentElement = event.target.nextElementSibling.textContent;
+	const contentElement = event.target.nextElementSibling;
 	document.getElementById('boardDetailId').value = boardId;
+
+
 	event.preventDefault();
 	fetch('/api/board/detail/' + boardId)
 		.then(response => {
@@ -64,9 +66,11 @@ function goToBoardDetail(event) {
 			const boardDetailContentElement = document.getElementById('boardDetailContent');
 			boardDetailTitleElement.textContent = titleElement;
 			boardDetailContentElement.textContent = contentElement;
-
 			document.getElementById('boardListPage').style.display = 'none';
 			document.getElementById('boardDetailPage').style.display = 'block';
+
+			document.getElementById('boardUpdateTitle').value = titleElement;
+			document.getElementById('boardUpdateContent').value = contentElement;
 
 		})
 		.catch(error => {
@@ -108,13 +112,8 @@ function deleteBoard() {
 //게시글 수정
 function updateBoard() {
 	var boardId = document.getElementById('boardDetailId').value;
-	var title = document.getElementById('boardDetailTitle').textContent;
-	var boardContentElement = document.getElementById('boardDetailContent');
-	var content = boardContentElement.textContent.trim();
-	document.getElementById('boardUpdateTitle').value = title;
-	document.getElementById('boardUpdateContent').textContent = content;
-	console.log(document.getElementById('boardUpdateTitle').value);
-	console.log(content);
+	var title = document.getElementById('boardUpdateTitle').value;
+ 	var content = document.getElementById('boardUpdateContent').value;
 	if (!confirm('게시글을 수정하시겠습니까?')) {
 		return;
 	}
