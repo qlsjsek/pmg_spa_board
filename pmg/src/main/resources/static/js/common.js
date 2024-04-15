@@ -68,3 +68,6 @@ function goToBoardFreeList() {
 function goToBoardRestList() {
 	goToPage('boardRestListPage');
 }
+function goToEditBoard() {
+	goToPage('boardEditPage');
+}

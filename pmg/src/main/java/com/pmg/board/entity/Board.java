@@ -1,5 +1,6 @@
 package com.pmg.board.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pmg.board.dto.BoardDto;
 
 import jakarta.persistence.Column;
@@ -46,5 +47,6 @@ public class Board {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
 	@ToString.Exclude
+	@JsonIgnore
 	private BoardCategory boardCategory;
 }

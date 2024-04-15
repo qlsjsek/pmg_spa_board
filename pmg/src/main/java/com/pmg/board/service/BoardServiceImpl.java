@@ -60,4 +60,14 @@ public class BoardServiceImpl implements BoardService{
 		return boardRepository.findAll();
 	}
 
+	@Override
+	public Board findBoardByBoardId(Long boardId) {
+		Optional<Board> optionalBoard = boardRepository.findById(boardId);
+		if (optionalBoard.isPresent()) {
+			return optionalBoard.get();
+		} else {
+			throw new NotFoundException("해당하는 게시글을 찾을 수 없습니다");
+		}
+	}
+
 }

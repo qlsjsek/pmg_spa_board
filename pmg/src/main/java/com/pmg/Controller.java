@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.pmg.board.entity.Board;
 import com.pmg.board.entity.BoardCategory;
 import com.pmg.board.service.BoardService;
 import com.pmg.user.dto.UserDto;
@@ -32,6 +33,8 @@ public class Controller {
 		}
 		List<BoardCategory> categories =  boardService.findCategories();
 		model.addAttribute("categories",categories);
+		List<Board> boards = boardService.findBoardList();
+		model.addAttribute("boards",boards);
 		String forwardPath = "pmg";
 		return forwardPath;
 	}

@@ -18,4 +18,6 @@ public interface BoardService {
 	public Board updateBoard(Long boardId, BoardDto boardDto);
 	//게시글 조회
 	public List<Board> findBoardList();
+	//게시글 한개 조회
+	public Board findBoardByBoardId(Long boardId);
 }

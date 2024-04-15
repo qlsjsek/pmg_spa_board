@@ -66,4 +66,13 @@ public class boardServiceImplTest extends PmgApplicationTests {
 		System.out.println("게시글 리스트 확인 -->"+boardList);
 	}
 	
+	@Test
+	@Transactional
+	//@Disabled
+	@Rollback(false)
+	void findBoardByBoardId() {
+		Long boardId = 21L;
+		Board board = boardService.findBoardByBoardId(boardId);
+		System.out.println("게시글 조회 --> " + board);
+	}
 }

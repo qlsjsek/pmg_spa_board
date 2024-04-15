@@ -148,7 +148,7 @@ function updateUser() {
 		.catch(error => {
 			console.error('Error : ', error);
 			alert('회원 정보 업데이트 실패');
-		})
+		});
 }
 
 //회원정보수정 비밀번호 인증

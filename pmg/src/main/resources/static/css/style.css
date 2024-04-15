@@ -156,6 +156,10 @@ li {
 	margin-left: 10px;
     margin-right: 63px; 
 }
+.board-title {
+	margin-left: 10px;
+	margin-right: 10px;
+}
 
 .board-author {
     margin-left: 250px; 
@@ -173,7 +177,9 @@ li {
 .board-number-category {
 	margin-right: 150px;
 }
-
+.board-title-category {
+	margin-left: 10px;
+}
 .board-author-category {
 	margin-left: 150px;
 }

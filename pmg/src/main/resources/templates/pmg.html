@@ -199,130 +199,32 @@
 						<span class="board-good-category">추천</span>
 						<span class="board-readCount-category">조회수</span>
 					</li>
-					<li>
-						<span class="board-number">1</span>
-						<a href="#" onclick="goToBoardDetail(1)">제목</a>
-						<span class="board-author">작성자1</span>
-						<span class="board-good">10</span>
-						<span class="board-readCount">10</span>
-					</li>
-					<li>
-						<span class="board-number">2</span>
-						<a href="#" onclick="goToBoardDetail(2)">제목</a>
-						<span class="board-author">작성자2</span>
+					<li th:each="board : ${boards}">
+						<span class="board-number" th:text="${board.boardId}">1</span>
+						<input type="hidden" id="boardListContent" th:value="${board.boardContent}">
+						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)" th:data-board-id="${board.boardId}" th:text="${board.boardTitle}">제목</a>
+						<span class="board-author" >작성자1</span>
+						<span class="board-good" th:text="${board.boardRecommend}">10</span>
+						<span class="board-readCount" th:text="${board.boardReadCount}">10</span>
 					</li>
 				</ul>
 				<div class="form-group">
 					<button onclick="goToWriteBoard()">작성하기</button>
 				</div>
 			</div>
-			<!-- 게시판 자유 리스트  -->
-			<div id="boardFreeListPage" style="display: none;">
-				<h2>자유 게시글</h2>
-				<div class="search-container">
-					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
-					<button onclick="searchBoard()">검색</button>
-				</div>
-				<ul>
-					<li>
-						<span class="board-number-category">번호</span>
-						<span class="board-title-category">제목</span>
-						<span class="board-author-category">작성자</span>
-						<span class="board-good-category">추천</span>
-						<span class="board-readCount-category">조회수</span>
-					</li>
-					<li>
-						<span class="board-number">1</span>
-						<a href="#" onclick="goToBoardDetail(1)">제목</a>
-						<span class="board-author">작성자1</span>
-						<span class="board-good">10</span>
-						<span class="board-readCount">10</span>
-					</li>
-					<li>
-						<span class="board-number">2</span>
-						<a href="#" onclick="goToBoardDetail(2)">제목</a>
-						<span class="board-author">작성자2</span>
-					</li>
-				</ul>
-				<div class="form-group">
-					<button onclick="goToWriteBoard()">작성하기</button>
-				</div>
-			</div>
-			<!-- 게시판 질문 리스트  -->
-			<div id="boardQuestionListPage" style="display: none;">
-				<h2>질문 게시글</h2>
-				<div class="search-container">
-					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
-					<button onclick="searchBoard()">검색</button>
-				</div>
-				<ul>
-					<li>
-						<span class="board-number-category">번호</span>
-						<span class="board-title-category">제목</span>
-						<span class="board-author-category">작성자</span>
-						<span class="board-good-category">추천</span>
-						<span class="board-readCount-category">조회수</span>
-					</li>
-					<li>
-						<span class="board-number">1</span>
-						<a href="#" onclick="goToBoardDetail(1)">제목</a>
-						<span class="board-author">작성자1</span>
-						<span class="board-good">10</span>
-						<span class="board-readCount">10</span>
-					</li>
-					<li>
-						<span class="board-number">2</span>
-						<a href="#" onclick="goToBoardDetail(2)">제목</a>
-						<span class="board-author">작성자2</span>
-					</li>
-				</ul>
-				<div class="form-group">
-					<button onclick="goToWriteBoard()">작성하기</button>
-				</div>
-			</div>
-			<!-- 게시판 기타 리스트  -->
-			<div id="boardRestListPage" style="display: none;">
-				<h2>기타 게시글</h2>
-				<div class="search-container">
-					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
-					<button onclick="searchBoard()">검색</button>
-				</div>
-				<ul>
-					<li>
-						<span class="board-number-category">번호</span>
-						<span class="board-title-category">제목</span>
-						<span class="board-author-category">작성자</span>
-						<span class="board-good-category">추천</span>
-						<span class="board-readCount-category">조회수</span>
-					</li>
-					<li>
-						<span class="board-number">1</span>
-						<a href="#" onclick="goToBoardDetail(1)">제목</a>
-						<span class="board-author">작성자1</span>
-						<span class="board-good">10</span>
-						<span class="board-readCount">10</span>
-					</li>
-					<li>
-						<span class="board-number">2</span>
-						<a href="#" onclick="goToBoardDetail(2)">제목</a>
-						<span class="board-author">작성자2</span>
-					</li>
-				</ul>
-				<div class="form-group">
-					<button onclick="goToWriteBoard()">작성하기</button>
-				</div>
-			</div>
+			
 
 			<!-- 게시판 상세보기  -->
 			<div id="boardDetailPage" style="display: none;">
 				<h2>게시글 상세페이지</h2>
+				<input type="hidden" id="boardDetailId" value="">
 				<div class="form-group">
 					<label>제목:</label>
-					<p>test1</p>
+					<p id="boardDetailTitle">test1</p>
 				</div>
 				<div class="form-group">
 					<label>내용:</label>
-					<p>내용입니다~</p>
+					<p id="boardDetailContent">내용입니다~</p>
 				</div>
 				<div class="form-group">
 					<button onclick="goToEditBoard()">수정하기</button>
@@ -336,19 +238,19 @@
 				<div class="form-group">
 					<label for="categorySelect">카테고리:</label>
 					<select id="categorySelect">
-						<option th:text=${categories[1].categoryName}></option>
-						<option th:text=${categories[2].categoryName}></option>
-						<option th:text=${categories[3].categoryName}></option>
+						<option th:value="${categories[1].categoryId}" th:text=${categories[1].categoryName}></option>
+						<option th:value="${categories[2].categoryId}" th:text=${categories[2].categoryName}></option>
+						<option th:value="${categories[3].categoryId}" th:text=${categories[3].categoryName}></option>
 					</select>
 				</div>
 				<div class="form-group">
-					<input type="text" placeholder="제목">
+					<input id="boardTitle" type="text" placeholder="제목">
 				</div>
 				<div class="form-group">
-					<textarea placeholder="내용"></textarea>
+					<textarea id="boardContent" placeholder="내용"></textarea>
 				</div>
 				<div class="form-group">
-					<button>작성</button>
+					<button onclick="createBoard()">작성</button>
 					<button onclick="cancelWriteBoard()">취소</button>
 				</div>
 			</div>
@@ -357,13 +259,13 @@
 			<div id="boardEditPage" style="display: none;">
 				<h2>게시글 편집</h2>
 				<div class="form-group">
-					<input type="text" placeholder="제목">
+					<input type="text" id="boardUpdateTitle" placeholder="제목">
+				</div>
+				<div class="form-group" >
+					<textarea placeholder="내용" id="boardUpdateContent"></textarea>
 				</div>
 				<div class="form-group">
-					<textarea placeholder="내용"></textarea>
-				</div>
-				<div class="form-group">
-					<button>수정하기</button>
+					<button onclick="updateBoard()">수정하기</button>
 				</div>
 			</div>
 		</div>
@@ -372,6 +274,7 @@
 
 <script src="js/common.js"></script>
 <script src="js/user.js"></script>
+<script src="js/board.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
