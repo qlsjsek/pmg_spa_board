@@ -12,7 +12,7 @@
 	<header>
 		<nav>
 			<a href="#" onclick="goToBoardList()" th:text="${categories[0].categoryName}"></a>
-			<a href="#" onclick="goToBoardFreeList()"  th:text="${categories[1].categoryName}"></a>
+			<a href="#" onclick="goToBoardFreeList()" th:text="${categories[1].categoryName}"></a>
 			<a href="#" onclick="goToBoardQuestionList()" th:text="${categories[2].categoryName}"></a>
 			<a href="#" onclick="goToBoardRestList()" th:text="${categories[3].categoryName}"></a>
 		</nav>
@@ -191,6 +191,37 @@
 					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
 					<button onclick="searchBoard()">검색</button>
 				</div>
+				<ul id="boardList">
+					<li>
+						<span class="board-number-category">분류</span>
+						<span class="board-title-category">제목</span>
+						<span class="board-author-category">작성자</span>
+						<span class="board-good-category">추천</span>
+						<span class="board-readCount-category">조회수</span>
+					</li>
+					<li th:each="board : ${boards}">
+						<span class="board-number" th:text="${board.boardCategory.categoryName}">1</span>
+						<input type="hidden" id="boardListContent" th:value="${board.boardContent}">
+						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)"
+							th:data-board-id="${board.boardId}" th:text="${board.boardTitle}">제목</a>
+						<span class="board-author">작성자1</span>
+						<span class="board-good" th:text="${board.boardRecommend}">10</span>
+						<span class="board-readCount" th:text="${board.boardReadCount}">10</span>
+					</li>
+				</ul>
+				<div id="pagination">
+				</div>
+				<div class="form-group">
+					<button onclick="goToWriteBoard()">작성하기</button>
+				</div>
+			</div>
+			<!-- 게시판 자유 리스트  -->
+			<div id="boardFreeListPage" style="display: none;">
+				<h2>자유 게시글</h2>
+				<div class="search-container">
+					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+					<button onclick="searchBoard()">검색</button>
+				</div>
 				<ul>
 					<li>
 						<span class="board-number-category">번호</span>
@@ -199,20 +230,76 @@
 						<span class="board-good-category">추천</span>
 						<span class="board-readCount-category">조회수</span>
 					</li>
-					<li th:each="board : ${boards}">
-						<span class="board-number" th:text="${board.boardId}">1</span>
-						<input type="hidden" id="boardListContent" th:value="${board.boardContent}">
-						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)" th:data-board-id="${board.boardId}" th:text="${board.boardTitle}">제목</a>
-						<span class="board-author" >작성자1</span>
-						<span class="board-good" th:text="${board.boardRecommend}">10</span>
-						<span class="board-readCount" th:text="${board.boardReadCount}">10</span>
+					<li>
+						<span class="board-number">1</span>
+						<input type="hidden" id="boardListContent">
+						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)">제목</a>
+						<span class="board-author">작성자1</span>
+						<span class="board-good">10</span>
+						<span class="board-readCount">10</span>
 					</li>
 				</ul>
 				<div class="form-group">
 					<button onclick="goToWriteBoard()">작성하기</button>
 				</div>
 			</div>
-			
+			<!-- 게시판 질문 리스트  -->
+			<div id="boardQuestionListPage" style="display: none;">
+				<h2>질문 게시글</h2>
+				<div class="search-container">
+					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+					<button onclick="searchBoard()">검색</button>
+				</div>
+				<ul>
+					<li>
+						<span class="board-number-category">번호</span>
+						<span class="board-title-category">제목</span>
+						<span class="board-author-category">작성자</span>
+						<span class="board-good-category">추천</span>
+						<span class="board-readCount-category">조회수</span>
+					</li>
+					<li>
+						<span class="board-number">1</span>
+						<input type="hidden" id="boardListContent">
+						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)">제목</a>
+						<span class="board-author">작성자1</span>
+						<span class="board-good">10</span>
+						<span class="board-readCount">10</span>
+					</li>
+				</ul>
+				<div class="form-group">
+					<button onclick="goToWriteBoard()">작성하기</button>
+				</div>
+			</div>
+			<!-- 기타 리스트  -->
+			<div id="boardRestListPage" style="display: none;">
+				<h2>기타 게시글</h2>
+				<div class="search-container">
+					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+					<button onclick="searchBoard()">검색</button>
+				</div>
+				<ul>
+					<li>
+						<span class="board-number-category">번호</span>
+						<span class="board-title-category">제목</span>
+						<span class="board-author-category">작성자</span>
+						<span class="board-good-category">추천</span>
+						<span class="board-readCount-category">조회수</span>
+					</li>
+					<li>
+						<span class="board-number">1</span>
+						<input type="hidden" id="boardListContent">
+						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)">제목</a>
+						<span class="board-author">작성자1</span>
+						<span class="board-good">10</span>
+						<span class="board-readCount">10</span>
+					</li>
+				</ul>
+				<div class="form-group">
+					<button onclick="goToWriteBoard()">작성하기</button>
+				</div>
+			</div>
+
 
 			<!-- 게시판 상세보기  -->
 			<div id="boardDetailPage" style="display: none;">
@@ -225,6 +312,11 @@
 				<div class="form-group">
 					<label>내용:</label>
 					<p id="boardDetailContent">내용입니다~</p>
+				</div>
+				<div class="form-group">
+					<div id="boardDetailImageContainer">
+						<img id="boardDetailImage" src="" alt="">
+					</div>
 				</div>
 				<div class="form-group">
 					<button onclick="goToEditBoard()">수정하기</button>
@@ -244,6 +336,10 @@
 					</select>
 				</div>
 				<div class="form-group">
+					<label for="boardImage">이미지 첨부:</label>
+					<input type="file" id="boardImage" accept="images/*">
+				</div>
+				<div class="form-group">
 					<input id="boardTitle" type="text" placeholder="제목">
 				</div>
 				<div class="form-group">
@@ -261,7 +357,7 @@
 				<div class="form-group">
 					<input type="text" id="boardUpdateTitle" placeholder="제목">
 				</div>
-				<div class="form-group" >
+				<div class="form-group">
 					<textarea placeholder="내용" id="boardUpdateContent"></textarea>
 				</div>
 				<div class="form-group">

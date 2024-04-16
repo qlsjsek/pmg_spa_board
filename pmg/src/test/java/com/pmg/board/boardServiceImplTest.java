@@ -9,6 +9,7 @@ import org.springframework.test.annotation.Rollback;
 
 import com.pmg.PmgApplicationTests;
 import com.pmg.board.dto.BoardDto;
+import com.pmg.board.dto.BoardImageDto;
 import com.pmg.board.entity.Board;
 import com.pmg.board.entity.BoardCategory;
 import com.pmg.board.service.BoardService;
@@ -30,11 +31,14 @@ public class boardServiceImplTest extends PmgApplicationTests {
 	
 	@Test
 	@Transactional
-	@Disabled
+	//@Disabled
 	@Rollback(false)
 	void createBoard() {
 		BoardDto dto = BoardDto.builder().categoryId(1L).boardTitle("test1").boardContent("test1Content").build();
-		Board board = boardService.createBoard(dto);
+		BoardImageDto image = new BoardImageDto();
+		image.setBoardId(1L);
+		image.setImageName("imageTest1");
+		Board board = boardService.createBoard(dto,image);
 		System.out.println("게시글 작성 확인 --> :" + board);
 	}
 	
@@ -59,7 +63,7 @@ public class boardServiceImplTest extends PmgApplicationTests {
 	
 	@Test
 	@Transactional
-	//@Disabled
+	@Disabled
 	@Rollback(false)
 	void findBoardList() {
 		List<Board> boardList = boardService.findBoardList();
@@ -68,7 +72,7 @@ public class boardServiceImplTest extends PmgApplicationTests {
 	
 	@Test
 	@Transactional
-	//@Disabled
+	@Disabled
 	@Rollback(false)
 	void findBoardByBoardId() {
 		Long boardId = 21L;

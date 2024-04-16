@@ -2,10 +2,13 @@ package com.pmg.board.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pmg.board.dto.BoardCategoryDto;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -21,6 +24,7 @@ import lombok.ToString;
 @Builder
 public class BoardCategory {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long categoryId;
 	private String categoryName;
 	
@@ -30,8 +34,9 @@ public class BoardCategory {
 								.build();
 	}
 	
-	@OneToMany(mappedBy = "boardCategory",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "boardCategory",cascade = CascadeType.ALL, orphanRemoval = true)
 	@ToString.Exclude
-	List<Board> boards;
+	@JsonIgnore
+	private List<Board> boards;
 	
 }

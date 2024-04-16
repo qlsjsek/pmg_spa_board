@@ -1,9 +1,12 @@
 //게시글 작성
 function createBoard() {
+	debugger;
 	var selectElement = document.getElementById('categorySelect');
 	var categoryId = selectElement.value;
 	var boardTitle = document.getElementById('boardTitle').value;
 	var boardContent = document.getElementById('boardContent').value;
+	var boardImage = document.getElementById('boardImage').files[0];
+
 	if (!boardTitle) {
 		alert('제목을 입력해주세요');
 		return;
@@ -13,32 +16,29 @@ function createBoard() {
 		return;
 	}
 
-	var boardDto = {
-		categoryId: categoryId,
-		boardTitle: boardTitle,
-		boardContent: boardContent
-	}
+	var formData = new FormData();
+	formData.append('categoryId', categoryId);
+	formData.append('boardTitle', boardTitle);
+	formData.append('boardContent', boardContent);
+	formData.append('boardImage', boardImage);
 
 	fetch('/api/board/create', {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(boardDto)
+		body: formData
 	})
 		.then(response => {
 			if (response.ok) {
 				alert('게시글이 성공적으로 작성되었습니다');
 				document.getElementById('boardWritePage').style.display = 'none';
 				document.getElementById('boardListPage').style.display = 'block';
-
+				location.reload();
 			} else {
-				console.error('Error : ' + error);
+				console.error('Error:', response.status);
 				alert('게시글 등록 실패');
 			}
 		})
 		.catch(error => {
-			console.error('Error : ' + error);
+			console.error('Error:', error);
 			alert('게시글 등록 실패');
 		});
 }
@@ -62,15 +62,22 @@ function goToBoardDetail(event) {
 		.then(boardData => {
 			const titleElement = boardData.boardTitle;
 			const contentElement = boardData.boardContent;
+			const imageElement = boardData.imageUrl;
+
 			const boardDetailTitleElement = document.getElementById('boardDetailTitle');
 			const boardDetailContentElement = document.getElementById('boardDetailContent');
+			const boardDetailImageElement = document.getElementById('boardDetailImage');
+
 			boardDetailTitleElement.textContent = titleElement;
 			boardDetailContentElement.textContent = contentElement;
-			document.getElementById('boardListPage').style.display = 'none';
-			document.getElementById('boardDetailPage').style.display = 'block';
 
+			if (imageElement) {
+				boardDetailImageElement.innerHTML = `<img src="${imageElement}" alt="Board Image">`;
+			}
+			
 			document.getElementById('boardUpdateTitle').value = titleElement;
 			document.getElementById('boardUpdateContent').value = contentElement;
+			goToBoardDetail();
 
 		})
 		.catch(error => {
@@ -113,7 +120,7 @@ function deleteBoard() {
 function updateBoard() {
 	var boardId = document.getElementById('boardDetailId').value;
 	var title = document.getElementById('boardUpdateTitle').value;
- 	var content = document.getElementById('boardUpdateContent').value;
+	var content = document.getElementById('boardUpdateContent').value;
 	if (!confirm('게시글을 수정하시겠습니까?')) {
 		return;
 	}
@@ -153,3 +160,261 @@ function updateBoard() {
 
 }
 
+//자유게시판 리스트
+function freeBoardByCategortId() {
+	const categoryId = 2;
+	fetch(`/api/board/category/${categoryId}`)
+		.then(response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw new Error('게시글을 가져오는데 실패했습니다');
+			}
+		})
+		.then(boards => {
+			const boardListContainer = document.querySelector('#boardFreeListPage ul');
+			boardListContainer.innerHTML = ''
+			const tableHeader = document.createElement('li');
+			tableHeader.innerHTML = `
+                <span class="board-number-category">번호</span>
+                <span class="board-title-category">제목</span>
+                <span class="board-author-category">작성자</span>
+                <span class="board-good-category">추천</span>
+                <span class="board-readCount-category">조회수</span>
+            `;
+			boardListContainer.appendChild(tableHeader);;
+
+			boards.forEach((board, index) => {
+				const listItem = document.createElement('li');
+				listItem.innerHTML = `
+                    <span class="board-number">${index + 1}</span>
+                    <input type="hidden" id="boardListContent" value="${board.boardContent}">
+                    <a href="#" class="board-title" onclick="goToBoardDetail(event)" 
+                       data-board-id="${board.boardId}" 
+                       data-board-title="${board.boardTitle}">
+                       ${board.boardTitle}
+                    </a>
+                    <span class="board-author"></span>
+                    <span class="board-good">${board.boardRecommend}</span>
+                    <span class="board-readCount">${board.boardReadCount}</span>
+                `;
+				boardListContainer.appendChild(listItem);
+				document.getElementById('boardListPage').style.display = 'none';
+				document.getElementById('boardFreeListPage').style.display = 'block';
+			});
+		})
+		.catch(error => {
+			console.error('Error : ', error);
+		});
+}
+//질문게시판 리스트
+function questionBoardByCategortId() {
+	const categoryId = 3;
+	fetch(`/api/board/category/${categoryId}`)
+		.then(response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw new Error('게시글을 가져오는데 실패했습니다');
+			}
+		})
+		.then(boards => {
+			const boardListContainer = document.querySelector('#boardQuestionListPage ul');
+			boardListContainer.innerHTML = ''
+			const tableHeader = document.createElement('li');
+			tableHeader.innerHTML = `
+                <span class="board-number-category">번호</span>
+                <span class="board-title-category">제목</span>
+                <span class="board-author-category">작성자</span>
+                <span class="board-good-category">추천</span>
+                <span class="board-readCount-category">조회수</span>
+            `;
+			boardListContainer.appendChild(tableHeader);;
+
+			boards.forEach((board, index) => {
+				const listItem = document.createElement('li');
+				listItem.innerHTML = `
+                    <span class="board-number">${index + 1}</span>
+                    <input type="hidden" id="boardListContent" value="${board.boardContent}">
+                    <a href="#" class="board-title" onclick="goToBoardDetail(event)" 
+                       data-board-id="${board.boardId}" 
+                       data-board-title="${board.boardTitle}">
+                       ${board.boardTitle}
+                    </a>
+                    <span class="board-author"></span>
+                    <span class="board-good">${board.boardRecommend}</span>
+                    <span class="board-readCount">${board.boardReadCount}</span>
+                `;
+				boardListContainer.appendChild(listItem);
+				document.getElementById('boardListPage').style.display = 'none';
+				document.getElementById('boardQuestionListPage').style.display = 'block';
+			});
+		})
+		.catch(error => {
+			console.error('Error : ', error);
+		});
+}
+//기타게시판 리스트
+function restBoardByCategortId() {
+	const categoryId = 4;
+	fetch(`/api/board/category/${categoryId}`)
+		.then(response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw new Error('게시글을 가져오는데 실패했습니다');
+			}
+		})
+		.then(boards => {
+			const boardListContainer = document.querySelector('#boardRestListPage ul');
+			boardListContainer.innerHTML = ''
+			const tableHeader = document.createElement('li');
+			tableHeader.innerHTML = `
+                <span class="board-number-category">번호</span>
+                <span class="board-title-category">제목</span>
+                <span class="board-author-category">작성자</span>
+                <span class="board-good-category">추천</span>
+                <span class="board-readCount-category">조회수</span>
+            `;
+			boardListContainer.appendChild(tableHeader);;
+
+			boards.forEach((board, index) => {
+				const listItem = document.createElement('li');
+				listItem.innerHTML = `
+                    <span class="board-number">${index + 1}</span>
+                    <input type="hidden" id="boardListContent" value="${board.boardContent}">
+                    <a href="#" class="board-title" onclick="goToBoardDetail(event)" 
+                       data-board-id="${board.boardId}" 
+                       data-board-title="${board.boardTitle}">
+                       ${board.boardTitle}
+                    </a>
+                    <span class="board-author"></span>
+                    <span class="board-good">${board.boardRecommend}</span>
+                    <span class="board-readCount">${board.boardReadCount}</span>
+                `;
+				boardListContainer.appendChild(listItem);
+				document.getElementById('boardListPage').style.display = 'none';
+				document.getElementById('boardRestListPage').style.display = 'block';
+			});
+		})
+		.catch(error => {
+			console.error('Error : ', error);
+		});
+}
+
+//검색
+function searchBoard() {
+	const searchInput = document.getElementById('searchInput').value.trim();
+
+	if (!searchInput) {
+		return;
+	}
+
+	fetch(`/api/board/searchByTitle?keyword=${searchInput}`)
+		.then(response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw new Error('게시글 검색에 실패했습니다.');
+			}
+		})
+		.then(boards => {
+			const boardListContainer = document.querySelector('#boardListPage ul');
+			boardListContainer.innerHTML = ''
+			const tableHeader = document.createElement('li');
+			tableHeader.innerHTML = `
+                <span class="board-number-category">번호</span>
+                <span class="board-title-category">제목</span>
+                <span class="board-author-category">작성자</span>
+                <span class="board-good-category">추천</span>
+                <span class="board-readCount-category">조회수</span>
+            `;
+			boardListContainer.appendChild(tableHeader);;
+
+			boards.forEach((board, index) => {
+				const listItem = document.createElement('li');
+				listItem.innerHTML = `
+                    <span class="board-number">${index + 1}</span>
+                    <input type="hidden" id="boardListContent" value="${board.boardContent}">
+                    <a href="#" class="board-title" onclick="goToBoardDetail(event)" 
+                       data-board-id="${board.boardId}" 
+                       data-board-title="${board.boardTitle}">
+                       ${board.boardTitle}
+                    </a>
+                    <span class="board-author"></span>
+                    <span class="board-good">${board.boardRecommend}</span>
+                    <span class="board-readCount">${board.boardReadCount}</span>
+                `;
+				boardListContainer.appendChild(listItem);
+			});
+		})
+		.catch(error => {
+			console.error('Error: ', error);
+			alert('게시글 검색에 실패했습니다.');
+		});
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function goToPage(pageId) {
+	const pages = ['loginPage', 'forgotUserIdForm', 'forgotPasswordForm', 'boardListPage', 'registerPage', 'profilePage',
+		'editProfilePage', 'boardDetailPage', 'boardEditPage', 'boardWritePage', 'boardQuestionListPage', 'boardFreeListPage', 'boardRestListPage'];
+
+
+	pages.forEach(page => {
+		const element = document.getElementById(page);
+		if (element) {
+			element.style.display = 'none';
+			clearText();
+		}
+	});
+
+	const pageElement = document.getElementById(pageId);
+	if (pageElement) {
+		pageElement.style.display = 'block';
+	}
+}
+function clearText() {
+	document.getElementById("userId").value = "";
+	document.getElementById("userPassword").value = "";
+	document.getElementById("confirmPassword").value = "";
+	document.getElementById("userName").value = "";
+	document.getElementById("userBirthDate").value = "";
+	document.getElementById("userPhone").value = "";
+	document.getElementById("userAddress").value = "";
+	document.getElementById("userEmail").value = "";
+	document.getElementById("loginUserId").value = "";
+	document.getElementById("loginUserPassword").value = "";
+}
+
+
+function goToBoardQuestionList() {
+	goToPage('boardQuestionListPage');
+	questionBoardByCategortId();
+}
+function goToBoardFreeList() {
+	goToPage('boardFreeListPage');
+	freeBoardByCategortId();
+}
+function goToBoardRestList() {
+	goToPage('boardRestListPage');
+	restBoardByCategortId();
+}
+function goToBoardDetail() {
+	goToPage('boardDetailPage');
+}

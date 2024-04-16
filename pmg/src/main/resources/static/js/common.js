@@ -1,6 +1,6 @@
 function goToPage(pageId) {
-	const pages = ['loginPage', 'forgotUserIdForm', 'forgotPasswordForm', 'boardListPage', 'registerPage', 'profilePage', 
-	'editProfilePage', 'boardDetailPage', 'boardEditPage', 'boardWritePage', 'boardQuestionListPage', 'boardFreeListPage','boardRestListPage'];
+	const pages = ['loginPage', 'forgotUserIdForm', 'forgotPasswordForm', 'boardListPage', 'registerPage', 'profilePage',
+		'editProfilePage', 'boardDetailPage', 'boardEditPage', 'boardWritePage', 'boardQuestionListPage', 'boardFreeListPage', 'boardRestListPage'];
 
 
 	pages.forEach(page => {
@@ -51,6 +51,7 @@ function goToFindPassword() {
 
 function goToBoardList() {
 	goToPage('boardListPage');
+	location.reload();
 }
 
 function goToEditProfile() {
@@ -58,15 +59,6 @@ function goToEditProfile() {
 }
 function goToWriteBoard() {
 	goToPage('boardWritePage');
-}
-function goToBoardQuestionList() {
-	goToPage('boardQuestionListPage');
-}
-function goToBoardFreeList() {
-	goToPage('boardFreeListPage');
-}
-function goToBoardRestList() {
-	goToPage('boardRestListPage');
 }
 function goToEditBoard() {
 	goToPage('boardEditPage');

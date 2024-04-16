@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.pmg.board.entity.Board;
 import com.pmg.board.entity.BoardCategory;
 import com.pmg.board.service.BoardService;
-import com.pmg.user.dto.UserDto;
 import com.pmg.user.entity.User;
 import com.pmg.user.service.UserService;
 

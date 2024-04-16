@@ -152,23 +152,44 @@ li {
     margin-bottom: 20px; 
 }
 
-.board-number {
-	margin-left: 10px;
-    margin-right: 63px; 
+.board-number-category,
+.board-title-category,
+.board-author-category,
+.board-good-category,
+.board-readCount-category {
+    display: inline-block;
+    width: 100px; /* 각 카테고리 헤더의 너비 설정 */
+    font-weight: bold;
 }
+/* 각 게시글 제목 스타일 */
 .board-title {
-	margin-left: 10px;
-	margin-right: 10px;
+    width: 400px; /* 게시글 제목의 너비 설정 */
+    display: inline-block;
+    text-overflow: ellipsis; /* 긴 제목은 생략(...) 표시 */
+    overflow: hidden;
+    white-space: nowrap;
+    margin-left: 50px;
 }
 
+/* 각 작성자 스타일 */
 .board-author {
-    margin-left: 250px; 
+    width: 120px; /* 작성자의 너비 설정 */
+    display: inline-block;
+    margin-left: 18px;
 }
+
+/* 각 추천 수 스타일 */
 .board-good {
-	margin-left: 80px;
+    width: 80px; /* 추천 수의 너비 설정 */
+    display: inline-block;
+    margin-left: 90px;
 }
-.board-readCount{
-	margin-left: 96px;
+
+/* 각 조회수 스타일 */
+.board-readCount {
+    width: 80px; /* 조회수의 너비 설정 */
+    display: inline-block;
+    margin-left: 110px;
 }
 
 
