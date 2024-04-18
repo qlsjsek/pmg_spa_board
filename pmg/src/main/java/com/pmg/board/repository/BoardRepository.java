@@ -9,4 +9,7 @@ import com.pmg.board.entity.Board;
 public interface BoardRepository extends JpaRepository<Board, Long>{
 	List<Board> findByBoardCategoryCategoryId(Long categoryId);
 	List<Board> findByBoardTitleContaining(String keyword);
+	List<Board> findAllByOrderByCreatedTimeDesc();
+	List<Board> findAllByOrderByCreatedTimeAsc();
+	List<Board> findByBoardCategoryCategoryIdOrderByCreatedTimeDesc(Long categoryId);
 }

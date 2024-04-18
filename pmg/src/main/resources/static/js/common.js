@@ -58,7 +58,12 @@ function goToEditProfile() {
 	goToPage('editProfilePage');
 }
 function goToWriteBoard() {
-	goToPage('boardWritePage');
+	var loginUser = document.getElementById('createUserId');
+	if(!loginUser || loginUser == null) {
+		alert('로그인이 필요합니다');
+	} else {
+		goToPage('boardWritePage');
+	}
 }
 function goToEditBoard() {
 	goToPage('boardEditPage');

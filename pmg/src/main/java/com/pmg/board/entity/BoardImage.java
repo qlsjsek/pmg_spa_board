@@ -36,7 +36,7 @@ public class BoardImage {
 		return boardImage;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "board_id")
 	@ToString.Exclude
 	private Board board;

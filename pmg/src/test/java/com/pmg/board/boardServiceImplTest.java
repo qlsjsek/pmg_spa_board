@@ -12,6 +12,8 @@ import com.pmg.board.dto.BoardDto;
 import com.pmg.board.dto.BoardImageDto;
 import com.pmg.board.entity.Board;
 import com.pmg.board.entity.BoardCategory;
+import com.pmg.board.entity.BoardImage;
+import com.pmg.board.service.BoardImageService;
 import com.pmg.board.service.BoardService;
 
 import jakarta.transaction.Transactional;
@@ -19,6 +21,8 @@ import jakarta.transaction.Transactional;
 public class boardServiceImplTest extends PmgApplicationTests {
 	@Autowired
 	BoardService boardService;
+	@Autowired
+	BoardImageService boardImageService;
 	
 	@Test
 	@Transactional
@@ -31,7 +35,7 @@ public class boardServiceImplTest extends PmgApplicationTests {
 	
 	@Test
 	@Transactional
-	//@Disabled
+	@Disabled
 	@Rollback(false)
 	void createBoard() {
 		BoardDto dto = BoardDto.builder().categoryId(1L).boardTitle("test1").boardContent("test1Content").build();
@@ -66,7 +70,7 @@ public class boardServiceImplTest extends PmgApplicationTests {
 	@Disabled
 	@Rollback(false)
 	void findBoardList() {
-		List<Board> boardList = boardService.findBoardList();
+		List<Board> boardList = boardService.findBoardListByDesc();
 		System.out.println("게시글 리스트 확인 -->"+boardList);
 	}
 	
@@ -79,4 +83,16 @@ public class boardServiceImplTest extends PmgApplicationTests {
 		Board board = boardService.findBoardByBoardId(boardId);
 		System.out.println("게시글 조회 --> " + board);
 	}
+	
+	@Test
+	@Transactional
+	//@Disabled
+	@Rollback(false)
+	void findImage() {
+		Long boardId = 18L;
+		BoardImage image = boardImageService.boardImageByBoardId(boardId);
+		System.out.println("이미지 확인 -->" + image);
+	}
+	
+	
 }

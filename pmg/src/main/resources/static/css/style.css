@@ -89,6 +89,7 @@ header {
 	text-align: center;
 
 }
+
 nav {
 	display: inline-block;
 }
@@ -117,39 +118,39 @@ header div {
 
 
 .search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 20px;
 }
 
 .search-container input[type="text"] {
-    flex: 1;
-    padding: 10px;
-    border-radius: 3px;
-    border: 1px solid #ccc;
+	flex: 1;
+	padding: 10px;
+	border-radius: 3px;
+	border: 1px solid #ccc;
 }
 
 .search-container button {
 	width: 20%;
-    padding: 10px;
-    border-radius: 3px;
-    border: 1px solid #ccc;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
+	padding: 10px;
+	border-radius: 3px;
+	border: 1px solid #ccc;
+	background-color: #007bff;
+	color: #fff;
+	cursor: pointer;
 }
 
 .search-container button:hover {
-    background-color: #0056b3;
+	background-color: #0056b3;
 }
 
 ul {
-    list-style-type: none;
+	list-style-type: none;
 }
 
 li {
-    margin-bottom: 20px; 
+	margin-bottom: 20px;
 }
 
 .board-number-category,
@@ -157,39 +158,46 @@ li {
 .board-author-category,
 .board-good-category,
 .board-readCount-category {
-    display: inline-block;
-    width: 100px; /* 각 카테고리 헤더의 너비 설정 */
-    font-weight: bold;
+	display: inline-block;
+	width: 100px;
+	/* 각 카테고리 헤더의 너비 설정 */
+	font-weight: bold;
 }
+
 /* 각 게시글 제목 스타일 */
 .board-title {
-    width: 400px; /* 게시글 제목의 너비 설정 */
-    display: inline-block;
-    text-overflow: ellipsis; /* 긴 제목은 생략(...) 표시 */
-    overflow: hidden;
-    white-space: nowrap;
-    margin-left: 50px;
+	width: 400px;
+	/* 게시글 제목의 너비 설정 */
+	display: inline-block;
+	text-overflow: ellipsis;
+	/* 긴 제목은 생략(...) 표시 */
+	overflow: hidden;
+	white-space: nowrap;
+	margin-left: 50px;
 }
 
 /* 각 작성자 스타일 */
 .board-author {
-    width: 120px; /* 작성자의 너비 설정 */
-    display: inline-block;
-    margin-left: 18px;
+	width: 120px;
+	/* 작성자의 너비 설정 */
+	display: inline-block;
+	margin-left: 18px;
 }
 
 /* 각 추천 수 스타일 */
 .board-good {
-    width: 80px; /* 추천 수의 너비 설정 */
-    display: inline-block;
-    margin-left: 90px;
+	width: 80px;
+	/* 추천 수의 너비 설정 */
+	display: inline-block;
+	margin-left: 90px;
 }
 
 /* 각 조회수 스타일 */
 .board-readCount {
-    width: 80px; /* 조회수의 너비 설정 */
-    display: inline-block;
-    margin-left: 110px;
+	width: 80px;
+	/* 조회수의 너비 설정 */
+	display: inline-block;
+	margin-left: 110px;
 }
 
 
@@ -198,19 +206,36 @@ li {
 .board-number-category {
 	margin-right: 150px;
 }
+
 .board-title-category {
 	margin-left: 10px;
 }
+
 .board-author-category {
 	margin-left: 150px;
 }
+
 .board-good-category {
 	margin-left: 80px;
 }
+
 .board-readCount-category {
 	margin-left: 80px;
 }
 
+.custom-recommend-btn {
+	margin-left: 20px !important;
+	display: inline-block !important;
+	width: 50px !important;
+	padding: 5px 10px !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
+	background-color: #fff !important;
+	color: #ff6347 !important;
+	border: 1px solid #000;
+}
 
-
-
+.custom-recommend-btn:hover {
+	background-color: #d63322 !important;
+	border-color: #d63322 !important;
+}

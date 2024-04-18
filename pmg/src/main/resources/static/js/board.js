@@ -1,6 +1,5 @@
 //게시글 작성
 function createBoard() {
-	debugger;
 	var selectElement = document.getElementById('categorySelect');
 	var categoryId = selectElement.value;
 	var boardTitle = document.getElementById('boardTitle').value;
@@ -45,10 +44,14 @@ function createBoard() {
 //게시글 상세페이지
 function goToBoardDetail(event) {
 	const boardId = event.target.getAttribute('data-board-id');
-	const boardTitle = event.target.textContent;
-	const contentElement = event.target.nextElementSibling;
 	document.getElementById('boardDetailId').value = boardId;
+	var userId = document.getElementById('detailUserId');
+	var writeUserId = document.getElementById('writerUserId').value;
 
+	if (userId !== writeUserId) {
+		document.getElementById('updateBtn').style.display = "none";
+		document.getElementById('deleteBtn').style.display = "none";
+	}
 
 	event.preventDefault();
 	fetch('/api/board/detail/' + boardId)
@@ -60,28 +63,47 @@ function goToBoardDetail(event) {
 			}
 		})
 		.then(boardData => {
+			goToBoardDetail1();
+			increaseReadCount(boardId);
 			const titleElement = boardData.boardTitle;
 			const contentElement = boardData.boardContent;
-			const imageElement = boardData.imageUrl;
-
+			const recommendElement = boardData.boardRecommend;
 			const boardDetailTitleElement = document.getElementById('boardDetailTitle');
 			const boardDetailContentElement = document.getElementById('boardDetailContent');
-			const boardDetailImageElement = document.getElementById('boardDetailImage');
+			const boardDetailRecommendElement = document.getElementById('boardDetailRecommend');
 
 			boardDetailTitleElement.textContent = titleElement;
 			boardDetailContentElement.textContent = contentElement;
-
-			if (imageElement) {
-				boardDetailImageElement.innerHTML = `<img src="${imageElement}" alt="Board Image">`;
-			}
-			
+			boardDetailRecommendElement.textContent = recommendElement;
+			findBoardImage();
 			document.getElementById('boardUpdateTitle').value = titleElement;
 			document.getElementById('boardUpdateContent').value = contentElement;
-			goToBoardDetail();
+
 
 		})
 		.catch(error => {
 			console.error('Error :', error);
+		});
+}
+//boardId로 이미지 조회
+function findBoardImage() {
+	var boardId = document.getElementById('boardDetailId').value;
+	fetch(`/api/board/image/${boardId}`)
+		.then(response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw new Error('이미지를 가져오는데 실패했습니다');
+			}
+		})
+		.then(imageData => {
+			const imageName = imageData.imageName;
+			const imageElement = document.getElementById('boardDetailImage');
+			const imageUrl = '/images/' + imageName;
+			imageElement.src = imageUrl;
+		})
+		.catch(error => {
+			console.error('Error : ', error);
 		});
 }
 
@@ -354,8 +376,55 @@ function searchBoard() {
 		});
 }
 
+//조회수 증가
+function increaseReadCount(boardId) {
+	fetch(`/api/board/readCount/${boardId}`, {
+		method: 'GET'
+	})
+		.then(response => {
+			if (response.ok) {
+				console.log('조회수 증가 성공')
+			} else {
+				console.log('조회수 증가 실패 : ', response.statusText);
+			}
+		})
+		.catch(error => {
+			console.error('Error : ', error);
+		});
+
+}
 
 
+//게시글 추천
+function recommend() {
+	var boardId = document.getElementById('boardDetailId').value;
+	var recommendCountElement = document.getElementById('boardDetailRecommend');
+	var recommendCount = parseInt(recommendCountElement.innerText) + 1;
+	fetch(`/api/board/recommend/${boardId}?boardRecommend=${recommendCount}`, {
+		method: 'PUT',
+	})
+		.then(response => {
+			if (response.ok) {
+				return response.text();
+			} else {
+				throw new Error('추천 실패');
+			}
+		})
+		.then(message => {
+			console.log(message);
+			const recommendCountElement = document.getElementById('boardDetailRecommend');
+			var recommendCount = parseInt(recommendCountElement.innerText);
+			recommendCount++;
+			recommendCountElement.innerText = recommendCount;
+
+		})
+		.catch(error => {
+			console.error('Error :', error);
+		});
+}
+
+
+//전체 게시글 정렬
 
 
 
@@ -415,6 +484,6 @@ function goToBoardRestList() {
 	goToPage('boardRestListPage');
 	restBoardByCategortId();
 }
-function goToBoardDetail() {
+function goToBoardDetail1() {
 	goToPage('boardDetailPage');
 }

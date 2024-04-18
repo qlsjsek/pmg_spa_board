@@ -191,6 +191,14 @@
 					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
 					<button onclick="searchBoard()">검색</button>
 				</div>
+				<div class="form-group">
+					<label for="sort">정렬:</label>
+					<select id="sorting">
+						<option value="#">선택</option>
+						<option value="createdTimeDesc">최신순</option>
+						<option value="createdTimeAsc">오래된순</option>
+					</select>
+				</div>
 				<ul id="boardList">
 					<li>
 						<span class="board-number-category">분류</span>
@@ -206,7 +214,7 @@
 							th:data-board-id="${board.boardId}" th:text="${board.boardTitle}">제목</a>
 						<span class="board-author">작성자1</span>
 						<span class="board-good" th:text="${board.boardRecommend}">10</span>
-						<span class="board-readCount" th:text="${board.boardReadCount}">10</span>
+						<span class="board-readCount" th:text="${board.boardReadCount}"></span>
 					</li>
 				</ul>
 				<div id="pagination">
@@ -221,6 +229,14 @@
 				<div class="search-container">
 					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
 					<button onclick="searchBoard()">검색</button>
+				</div>
+				<div class="select-box">
+					<label for="sort">정렬:</label>
+					<select id="sorting">
+						<option value="#">선택</option>
+						<option value="createdTimeDesc">최신순</option>
+						<option value="createdTimeAsc">오래된순</option>
+					</select>
 				</div>
 				<ul>
 					<li>
@@ -304,6 +320,7 @@
 			<!-- 게시판 상세보기  -->
 			<div id="boardDetailPage" style="display: none;">
 				<h2>게시글 상세페이지</h2>
+				<input type="hidden" id="detailUserId" th:if="${loginUser != null}" th:value="${loginUser.userId}">
 				<input type="hidden" id="boardDetailId" value="">
 				<div class="form-group">
 					<label>제목:</label>
@@ -315,18 +332,26 @@
 				</div>
 				<div class="form-group">
 					<div id="boardDetailImageContainer">
-						<img id="boardDetailImage" src="" alt="">
+						<img id="boardDetailImage" src="">
 					</div>
 				</div>
 				<div class="form-group">
-					<button onclick="goToEditBoard()">수정하기</button>
-					<button onclick="deleteBoard()">삭제하기</button>
+					<label>추천수:</label>
+					<p id="boardDetailRecommend">0</p>
+					<button class="btn btn-primary custom-recommend-btn" onclick="recommend()">
+						<i class="far fa-heart"></i> 추천하기
+					</button>
+				</div>
+				<div class="form-group">
+					<button id="updateBtn" onclick="goToEditBoard()">수정하기</button>
+					<button id="deleteBtn" onclick="deleteBoard()">삭제하기</button>
 				</div>
 			</div>
 
 			<!-- 게시판 작성  -->
 			<div id="boardWritePage" style="display: none;">
 				<h2>게시글 작성</h2>
+				<input type="hidden" id="createUserId" th:if="${loginUser != null}" th:value="${loginUser.userId}">
 				<div class="form-group">
 					<label for="categorySelect">카테고리:</label>
 					<select id="categorySelect">

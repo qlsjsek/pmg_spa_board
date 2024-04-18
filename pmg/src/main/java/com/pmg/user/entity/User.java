@@ -1,19 +1,26 @@
 package com.pmg.user.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.pmg.board.entity.Board;
 import com.pmg.user.dto.UserDto;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "userentity")
@@ -47,5 +54,7 @@ public class User {
 								.userBirthDate(dto.getUserBirthDate())
 								.build();
 	}
-	
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Board> boards;
 }

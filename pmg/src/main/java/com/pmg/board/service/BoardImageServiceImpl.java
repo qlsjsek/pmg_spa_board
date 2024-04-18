@@ -1,7 +1,10 @@
 package com.pmg.board.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import com.pmg.board.dto.BoardImageDto;
 import com.pmg.board.entity.Board;
@@ -27,6 +30,16 @@ public class BoardImageServiceImpl implements BoardImageService{
 		boardImage.setImageName(boardImageDto.getImageName());
 		boardImage.setBoard(board);
 		boardImageRepository.save(boardImage);
+	}
+
+	@Override
+	public BoardImage boardImageByBoardId(Long boardId) {
+		Optional<BoardImage> optionalBoardImage = boardImageRepository.findByBoardBoardId(boardId);
+		if (optionalBoardImage.isPresent()) {
+			return optionalBoardImage.get();
+		} else {
+			throw new NotFoundException("이미지를 찾을 수 없습니다");
+		}
 	}
 
 }

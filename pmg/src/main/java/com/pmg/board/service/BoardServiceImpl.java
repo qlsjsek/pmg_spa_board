@@ -67,8 +67,12 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<Board> findBoardList() {
-		return boardRepository.findAll();
+	public List<Board> findBoardListByDesc() {
+		return boardRepository.findAllByOrderByCreatedTimeDesc();
+	}
+	@Override
+	public List<Board> findBoardListByAsc() {
+		return boardRepository.findAllByOrderByCreatedTimeAsc();
 	}
 
 	@Override
@@ -82,8 +86,8 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<Board> findBoardByCategoryId(Long categoryId) {
-		return boardRepository.findByBoardCategoryCategoryId(categoryId);
+	public List<Board> findBoardByCategoryIdByDesc(Long categoryId) {
+		return boardRepository.findByBoardCategoryCategoryIdOrderByCreatedTimeDesc(categoryId);
 	}
 
 	@Override
@@ -94,6 +98,26 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public Page<Board> getBoardList(Pageable pageable) {
 		return boardRepository.findAll(pageable);
+	}
+
+	@Override
+	public void increaseReadCount(Long boardId) {
+		Optional<Board> optionalBoard = boardRepository.findById(boardId);
+		if(optionalBoard.isPresent()) {
+			Board board = optionalBoard.get();
+			board.setBoardReadCount(board.getBoardReadCount() + 1);
+			boardRepository.save(board);
+		}
+	}
+
+	@Override
+	public void updateRecommendCount(Long boardId, int boardRecommend) {
+		Optional<Board> optionalBoard = boardRepository.findById(boardId);
+		if(optionalBoard.isPresent()) {
+			Board board = optionalBoard.get();
+			board.setBoardRecommend(boardRecommend);
+			boardRepository.save(board);
+		}
 	}
 
 }

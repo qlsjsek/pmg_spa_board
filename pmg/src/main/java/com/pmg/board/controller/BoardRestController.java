@@ -26,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.pmg.board.dto.BoardDto;
 import com.pmg.board.dto.BoardImageDto;
 import com.pmg.board.entity.Board;
+import com.pmg.board.entity.BoardImage;
+import com.pmg.board.service.BoardImageService;
 import com.pmg.board.service.BoardService;
 
 @RestController
@@ -33,6 +35,8 @@ import com.pmg.board.service.BoardService;
 public class BoardRestController {
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private BoardImageService boardImageService;
 
 	@PostMapping("/create")
 	public ResponseEntity<String> createBoard(@RequestParam(value = "boardImage", required = false) MultipartFile file,
@@ -46,7 +50,7 @@ public class BoardRestController {
 		BoardImageDto boardImageDto = null;
 		if (file != null && !file.isEmpty()) {
 			try {
-				String uploadDir = "static/images";
+				String uploadDir = "src/main/resources/static/images";
 				Path uploadPath = Paths.get(uploadDir);
 				Files.createDirectories(uploadPath);
 				String originalFilename = file.getOriginalFilename();
@@ -100,7 +104,7 @@ public class BoardRestController {
 
 	@GetMapping("/category/{categoryId}")
 	public ResponseEntity<List<Board>> boardByCategoryId(@PathVariable("categoryId") Long categoryId) {
-		List<Board> boards = boardService.findBoardByCategoryId(categoryId);
+		List<Board> boards = boardService.findBoardByCategoryIdByDesc(categoryId);
 		return new ResponseEntity<>(boards, HttpStatus.OK);
 	}
 
@@ -115,6 +119,36 @@ public class BoardRestController {
 			@RequestParam(defaultValue = "5") int size) {
 		PageRequest pageable = PageRequest.of(page, size);
 		return boardService.getBoardList(pageable);
+	}
+
+	@GetMapping("/image/{boardId}")
+	public ResponseEntity<BoardImage> getBoardImageByBoardId(@PathVariable("boardId") Long boardId) {
+		BoardImage boardImage = boardImageService.boardImageByBoardId(boardId);
+		return ResponseEntity.ok(boardImage);
+	}
+
+	@GetMapping("/readCount/{boardId}")
+	public ResponseEntity<String> increaseReadCount(@PathVariable("boardId") Long boardId) {
+		boardService.increaseReadCount(boardId);
+		return ResponseEntity.ok("조회수 증가 성공");
+	}
+
+	@PutMapping("/recommend/{boardId}")
+	public ResponseEntity<String> updateRecommendCount(@PathVariable("boardId") Long boardId,
+			@RequestParam("boardRecommend") int boardRecommend) {
+		boardService.updateRecommendCount(boardId, boardRecommend);
+		return ResponseEntity.ok("게시글 추천 성공~");
+	}
+
+	@GetMapping("/api/board/sorting")
+	public List<Board> getBoards(@RequestParam("sorting") String sorting) {
+		if ("createdTimeDesc".equals(sorting)) {
+			return boardService.findBoardListByDesc();
+		} else if ("createdTimeAsc".equals(sorting)) {
+			return boardService.findBoardListByAsc();
+		} else {
+			return boardService.findBoardListByDesc();
+		}
 	}
 
 }

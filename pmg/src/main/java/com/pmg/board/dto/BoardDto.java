@@ -19,6 +19,8 @@ public class BoardDto {
 	
 	private Long categoryId;
 	
+	private Long userId;
+	
 	public static BoardDto toDto(Board entity) {
 		return BoardDto.builder()
 						.boardTitle(entity.getBoardTitle())

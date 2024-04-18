@@ -1,9 +1,13 @@
 package com.pmg.board.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pmg.board.dto.BoardDto;
+import com.pmg.user.entity.User;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -38,6 +42,9 @@ public class Board {
 	private int boardReadCount;
 	private int boardRecommend;
 	
+	@CreationTimestamp
+	private LocalDateTime createdTime;
+	
 	public static Board toEntity(BoardDto dto) {
 		return Board.builder()
 					.boardTitle(dto.getBoardTitle())
@@ -58,4 +65,9 @@ public class Board {
 	@ToString.Exclude
 	@JsonIgnore
 	private List<BoardImage> images;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
+	@ToString.Exclude
+	private User user;
 }
