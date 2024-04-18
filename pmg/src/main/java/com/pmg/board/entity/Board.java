@@ -66,8 +66,9 @@ public class Board {
 	@JsonIgnore
 	private List<BoardImage> images;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	@ToString.Exclude
+	@JsonIgnore
 	private User user;
 }

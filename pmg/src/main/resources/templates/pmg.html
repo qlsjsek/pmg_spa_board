@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<title>Insert title here</title>
 </head>
 
@@ -207,7 +208,7 @@
 						<span class="board-good-category">추천</span>
 						<span class="board-readCount-category">조회수</span>
 					</li>
-					<li th:each="board : ${boards}">
+					<li th:each="board : ${boards}" th:attr="data-writer-id=${board.User.userId}">
 						<span class="board-number" th:text="${board.boardCategory.categoryName}">1</span>
 						<input type="hidden" id="boardListContent" th:value="${board.boardContent}">
 						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)"
@@ -217,8 +218,8 @@
 						<span class="board-readCount" th:text="${board.boardReadCount}"></span>
 					</li>
 				</ul>
-				<div id="pagination">
-				</div>
+	
+				<div id="pagination" class="pagination-container"></div>
 				<div class="form-group">
 					<button onclick="goToWriteBoard()">작성하기</button>
 				</div>
@@ -226,10 +227,6 @@
 			<!-- 게시판 자유 리스트  -->
 			<div id="boardFreeListPage" style="display: none;">
 				<h2>자유 게시글</h2>
-				<div class="search-container">
-					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
-					<button onclick="searchBoard()">검색</button>
-				</div>
 				<div class="select-box">
 					<label for="sort">정렬:</label>
 					<select id="sorting">
@@ -262,10 +259,6 @@
 			<!-- 게시판 질문 리스트  -->
 			<div id="boardQuestionListPage" style="display: none;">
 				<h2>질문 게시글</h2>
-				<div class="search-container">
-					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
-					<button onclick="searchBoard()">검색</button>
-				</div>
 				<ul>
 					<li>
 						<span class="board-number-category">번호</span>
@@ -290,10 +283,6 @@
 			<!-- 기타 리스트  -->
 			<div id="boardRestListPage" style="display: none;">
 				<h2>기타 게시글</h2>
-				<div class="search-container">
-					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
-					<button onclick="searchBoard()">검색</button>
-				</div>
 				<ul>
 					<li>
 						<span class="board-number-category">번호</span>
@@ -321,6 +310,7 @@
 			<div id="boardDetailPage" style="display: none;">
 				<h2>게시글 상세페이지</h2>
 				<input type="hidden" id="detailUserId" th:if="${loginUser != null}" th:value="${loginUser.userId}">
+				<input type="hidden" id="detailWriterUserId" value="">
 				<input type="hidden" id="boardDetailId" value="">
 				<div class="form-group">
 					<label>제목:</label>
@@ -339,7 +329,7 @@
 					<label>추천수:</label>
 					<p id="boardDetailRecommend">0</p>
 					<button class="btn btn-primary custom-recommend-btn" onclick="recommend()">
-						<i class="far fa-heart"></i> 추천하기
+						<i class="recommend"></i> 추천하기
 					</button>
 				</div>
 				<div class="form-group">
@@ -355,9 +345,12 @@
 				<div class="form-group">
 					<label for="categorySelect">카테고리:</label>
 					<select id="categorySelect">
-						<option th:value="${categories[1].categoryId}" th:text=${categories[1].categoryName}></option>
-						<option th:value="${categories[2].categoryId}" th:text=${categories[2].categoryName}></option>
-						<option th:value="${categories[3].categoryId}" th:text=${categories[3].categoryName}></option>
+						<option th:value="${categories[1].categoryId}" th:text=${categories[1].categoryName}>
+						</option>
+						<option th:value="${categories[2].categoryId}" th:text=${categories[2].categoryName}>
+						</option>
+						<option th:value="${categories[3].categoryId}" th:text=${categories[3].categoryName}>
+						</option>
 					</select>
 				</div>
 				<div class="form-group">
@@ -396,6 +389,7 @@
 <script src="js/common.js"></script>
 <script src="js/user.js"></script>
 <script src="js/board.js"></script>
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 

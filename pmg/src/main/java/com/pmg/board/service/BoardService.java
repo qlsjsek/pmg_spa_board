@@ -15,7 +15,7 @@ public interface BoardService {
 	public List<BoardCategory> findCategories();
 	
 	//게시글 작성
-	public Board createBoard(BoardDto boardDto, BoardImageDto boardImageDto);
+	public Board createBoard(BoardDto boardDto, BoardImageDto boardImageDto,String userId);
 	//게시글 삭제
 	public void deleteBoard(Long boardId);
 	//게시글 수정
@@ -36,6 +36,8 @@ public interface BoardService {
 	public void increaseReadCount(Long boardId);
 	//게시글 추천
 	public void updateRecommendCount(Long boardId, int boardRecommend);
+	//boardId로 userId찾기
+	public String findUserIdByBoardId(Long boardId);
 	
 	
 }

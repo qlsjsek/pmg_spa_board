@@ -40,9 +40,10 @@ public class boardServiceImplTest extends PmgApplicationTests {
 	void createBoard() {
 		BoardDto dto = BoardDto.builder().categoryId(1L).boardTitle("test1").boardContent("test1Content").build();
 		BoardImageDto image = new BoardImageDto();
+		String userId = "test1";
 		image.setBoardId(1L);
 		image.setImageName("imageTest1");
-		Board board = boardService.createBoard(dto,image);
+		Board board = boardService.createBoard(dto,image,userId);
 		System.out.println("게시글 작성 확인 --> :" + board);
 	}
 	
@@ -79,14 +80,19 @@ public class boardServiceImplTest extends PmgApplicationTests {
 	@Disabled
 	@Rollback(false)
 	void findBoardByBoardId() {
-		Long boardId = 21L;
+		Long boardId = 1L;
 		Board board = boardService.findBoardByBoardId(boardId);
 		System.out.println("게시글 조회 --> " + board);
+		if (board != null && board.getUser() != null) {
+		    System.out.println("게시글 작성자 --> " + board.getUser().getUserId());
+		} else {
+		    System.out.println("게시글 작성자 정보 없음");
+		}
 	}
 	
 	@Test
 	@Transactional
-	//@Disabled
+	@Disabled
 	@Rollback(false)
 	void findImage() {
 		Long boardId = 18L;
@@ -94,5 +100,14 @@ public class boardServiceImplTest extends PmgApplicationTests {
 		System.out.println("이미지 확인 -->" + image);
 	}
 	
+	@Test
+	@Transactional
+	//@Disabled
+	@Rollback(false)
+	void userId() {
+		Long boardId = 5L;
+		String userId =boardService.findUserIdByBoardId(boardId);
+		System.out.println("유저 확인 -->" + userId);
+	}
 	
 }

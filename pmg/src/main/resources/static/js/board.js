@@ -5,6 +5,7 @@ function createBoard() {
 	var boardTitle = document.getElementById('boardTitle').value;
 	var boardContent = document.getElementById('boardContent').value;
 	var boardImage = document.getElementById('boardImage').files[0];
+	var userId = document.getElementById('createUserId').value;
 
 	if (!boardTitle) {
 		alert('제목을 입력해주세요');
@@ -20,6 +21,7 @@ function createBoard() {
 	formData.append('boardTitle', boardTitle);
 	formData.append('boardContent', boardContent);
 	formData.append('boardImage', boardImage);
+	formData.append('userId', userId);
 
 	fetch('/api/board/create', {
 		method: 'POST',
@@ -44,66 +46,100 @@ function createBoard() {
 //게시글 상세페이지
 function goToBoardDetail(event) {
 	const boardId = event.target.getAttribute('data-board-id');
-	document.getElementById('boardDetailId').value = boardId;
-	var userId = document.getElementById('detailUserId');
-	var writeUserId = document.getElementById('writerUserId').value;
 
-	if (userId !== writeUserId) {
-		document.getElementById('updateBtn').style.display = "none";
-		document.getElementById('deleteBtn').style.display = "none";
-	}
+	findUserIdByBoardId(boardId)
+		.then(userId => {
+			console.log('게시물 작성자 userId:', userId);
 
-	event.preventDefault();
-	fetch('/api/board/detail/' + boardId)
-		.then(response => {
-			if (response.ok) {
-				return response.json();
-			} else {
-				throw new Error('게시글을 가져오는데 실패했습니다.');
+			const userIdElement = document.getElementById('detailUserId');
+			const detailUserId = userIdElement ? userIdElement.value : null;
+
+			console.log('detailUserId:', detailUserId);
+
+			if (detailUserId !== userId) {
+				document.getElementById('updateBtn').style.display = 'none';
+				document.getElementById('deleteBtn').style.display = 'none';
 			}
-		})
-		.then(boardData => {
-			goToBoardDetail1();
-			increaseReadCount(boardId);
-			const titleElement = boardData.boardTitle;
-			const contentElement = boardData.boardContent;
-			const recommendElement = boardData.boardRecommend;
-			const boardDetailTitleElement = document.getElementById('boardDetailTitle');
-			const boardDetailContentElement = document.getElementById('boardDetailContent');
-			const boardDetailRecommendElement = document.getElementById('boardDetailRecommend');
 
-			boardDetailTitleElement.textContent = titleElement;
-			boardDetailContentElement.textContent = contentElement;
-			boardDetailRecommendElement.textContent = recommendElement;
-			findBoardImage();
-			document.getElementById('boardUpdateTitle').value = titleElement;
-			document.getElementById('boardUpdateContent').value = contentElement;
+			document.getElementById('boardDetailId').value = boardId;
+			event.preventDefault();
 
+			fetch('/api/board/detail/' + boardId)
+				.then(response => {
+					if (response.ok) {
+						return response.json();
+					} else {
+						throw new Error('게시글을 가져오는데 실패했습니다.');
+					}
+				})
+				.then(boardData => {
+					goToBoardDetail1();
+					increaseReadCount(boardId);
+					const titleElement = boardData.boardTitle;
+					const contentElement = boardData.boardContent;
+					const recommendElement = boardData.boardRecommend;
 
+					const boardDetailTitleElement = document.getElementById('boardDetailTitle');
+					const boardDetailContentElement = document.getElementById('boardDetailContent');
+					const boardDetailRecommendElement = document.getElementById('boardDetailRecommend');
+					boardDetailTitleElement.textContent = titleElement;
+					boardDetailContentElement.textContent = contentElement;
+					boardDetailRecommendElement.textContent = recommendElement;
+					findBoardImage();
+					document.getElementById('boardUpdateTitle').value = titleElement;
+					document.getElementById('boardUpdateContent').value = contentElement;
+
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
 		})
 		.catch(error => {
-			console.error('Error :', error);
+			console.error('Error:', error);
 		});
 }
+
+function findUserIdByBoardId(boardId) {
+	return fetch(`/api/board/userId/${boardId}`)
+		.then(response => {
+			if (response.ok) {
+				return response.text();
+			} else {
+				throw new Error('게시물 작성자 정보를 가져오는데 실패했습니다.');
+			}
+		})
+		.catch(error => {
+			throw new Error('게시물 작성자 정보를 가져오는데 실패했습니다.');
+		});
+}
+
 //boardId로 이미지 조회
 function findBoardImage() {
 	var boardId = document.getElementById('boardDetailId').value;
+
 	fetch(`/api/board/image/${boardId}`)
 		.then(response => {
 			if (response.ok) {
 				return response.json();
+			} else if (response.status === 404) {
+				console.log('해당하는 이미지가 없습니다.');
+				return null;
 			} else {
 				throw new Error('이미지를 가져오는데 실패했습니다');
 			}
 		})
 		.then(imageData => {
-			const imageName = imageData.imageName;
-			const imageElement = document.getElementById('boardDetailImage');
-			const imageUrl = '/images/' + imageName;
-			imageElement.src = imageUrl;
+			if (imageData !== null) {
+				const imageName = imageData.imageName;
+				const imageElement = document.getElementById('boardDetailImage');
+				const imageUrl = '/images/' + imageName;
+				imageElement.src = imageUrl;
+			}
 		})
 		.catch(error => {
-			console.error('Error : ', error);
+			if (error.message !== '이미지를 가져오는데 실패했습니다') {
+				console.error('Error : ', error);
+			}
 		});
 }
 
@@ -331,7 +367,7 @@ function searchBoard() {
 	if (!searchInput) {
 		return;
 	}
-
+	debugger;
 	fetch(`/api/board/searchByTitle?keyword=${searchInput}`)
 		.then(response => {
 			if (response.ok) {
@@ -429,11 +465,72 @@ function recommend() {
 
 
 
+//페이징
+$(document).ready(function() {
+	loadBoardList(0);
 
+	$('#sorting').change(function() {
+		loadBoardList(0);
+	});
 
+	function searchBoard() {
+		const searchText = $('#searchInput').val();
+		loadBoardList(0, searchText);
+	}
+});
 
+function loadBoardList(page, searchText = '') {
+	const size = 5;
+	const sort = $('#sorting').val();
 
+	$.ajax({
+		url: '/api/board/boards',
+		method: 'GET',
+		data: {
+			page: page,
+			size: size,
+			sort: sort,
+			searchText: searchText
+		},
+		success: function(response) {
+			displayBoardList(response.content);
+			renderPagination(response.totalPages, page);
+		},
+		error: function(err) {
+			console.error('Error fetching board list:', err);
+		}
+	});
+}
 
+function displayBoardList(boards) {
+	const boardList = $('#boardList');
+	boardList.empty();
+
+	boards.forEach(board => {
+		console.log(board);
+		const categoryName = board.boardCategory ? board.boardCategory.categoryName : '카테고리 없음';
+		const userId = board.User ? board.User.userId : '사용자 없음';
+		const listItem = `<li>
+                    <span class="board-number-category">${categoryName}</span>
+                    <a href="#" class="board-title" onclick="goToBoardDetail(event)" data-board-id="${board.boardId}">${board.boardTitle}</a>
+                    <span class="board-author">${userId}</span>
+                    <span class="board-good">${board.boardRecommend}</span>
+                    <span class="board-readCount">${board.boardReadCount}</span>
+                </li>`;
+		boardList.append(listItem);
+	});
+}
+
+function renderPagination(totalPages, currentPage) {
+	const pagination = $('#pagination');
+	pagination.empty();
+
+	for (let i = 0; i < totalPages; i++) {
+		const pageNumber = i + 1;
+		const button = `<button onclick="loadBoardList(${i})" ${pageNumber === currentPage + 1 ? 'disabled' : ''}>${pageNumber}</button>`;
+		pagination.append(button);
+	}
+}
 
 
 

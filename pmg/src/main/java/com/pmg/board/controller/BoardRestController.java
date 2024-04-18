@@ -41,7 +41,7 @@ public class BoardRestController {
 	@PostMapping("/create")
 	public ResponseEntity<String> createBoard(@RequestParam(value = "boardImage", required = false) MultipartFile file,
 			@RequestParam("categoryId") Long categoryId, @RequestParam("boardTitle") String boardTitle,
-			@RequestParam("boardContent") String boardContent) {
+			@RequestParam("boardContent") String boardContent, @RequestParam("userId") String userId) {
 		BoardDto boardDto = new BoardDto();
 		boardDto.setCategoryId(categoryId);
 		boardDto.setBoardTitle(boardTitle);
@@ -64,7 +64,7 @@ public class BoardRestController {
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드 중 오류가 발생했습니다.");
 			}
 		}
-		boardService.createBoard(boardDto, boardImageDto);
+		boardService.createBoard(boardDto, boardImageDto, userId);
 		return ResponseEntity.ok("게시글 작성 성공");
 	}
 
@@ -150,5 +150,16 @@ public class BoardRestController {
 			return boardService.findBoardListByDesc();
 		}
 	}
+	
+    @GetMapping("/userId/{boardId}")
+    public ResponseEntity<String> findUserIdByBoardId(@PathVariable("boardId") Long boardId) {
+        String userId = boardService.findUserIdByBoardId(boardId);
+        
+        if (userId != null) {
+            return ResponseEntity.ok(userId);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 아이디를 찾을 수 없습니다: " + boardId);
+        }
+    }
 
 }

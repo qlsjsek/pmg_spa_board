@@ -3,6 +3,8 @@ package com.pmg.board.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,8 @@ import com.pmg.board.entity.Board;
 import com.pmg.board.entity.BoardCategory;
 import com.pmg.board.repository.BoardCategoryRepository;
 import com.pmg.board.repository.BoardRepository;
+import com.pmg.user.entity.User;
+import com.pmg.user.repository.UserRepository;
 
 @Service
 @Transactional
@@ -26,6 +30,8 @@ public class BoardServiceImpl implements BoardService{
 	BoardRepository boardRepository;
 	@Autowired
 	BoardImageService boardImageService;
+	@Autowired
+	UserRepository userRepository;
 	
 	@Override
 	public List<BoardCategory> findCategories() {
@@ -33,11 +39,16 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-    public Board createBoard(BoardDto boardDto, BoardImageDto boardImageDto) {
+    public Board createBoard(BoardDto boardDto, BoardImageDto boardImageDto,String userId) {
+		Optional<User> optionalUser = userRepository.findByUserId(userId);
+		if (optionalUser.isEmpty()) {
+			throw new  RuntimeException("사용자를 찾을 수 없습니다:"+userId);
+		}
         Board board = Board.builder()
                 .boardCategory(BoardCategory.builder().categoryId(boardDto.getCategoryId()).build())
                 .boardTitle(boardDto.getBoardTitle())
                 .boardContent(boardDto.getBoardContent())
+                .user(optionalUser.get())
                 .build();
         board = boardRepository.save(board);
 
@@ -118,6 +129,18 @@ public class BoardServiceImpl implements BoardService{
 			board.setBoardRecommend(boardRecommend);
 			boardRepository.save(board);
 		}
+	}
+
+	@Override
+	public String findUserIdByBoardId(Long boardId) {
+		Optional<Board> optionalBoard = boardRepository.findById(boardId);
+		if (optionalBoard.isPresent()) {
+			Board board = optionalBoard.get();
+			if (board.getUser() != null) {
+				return board.getUser().getUserId();
+			}
+		}
+		return null;
 	}
 
 }
