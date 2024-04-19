@@ -160,63 +160,78 @@ li {
 .board-readCount-category {
 	display: inline-block;
 	width: 100px;
-	/* 각 카테고리 헤더의 너비 설정 */
 	font-weight: bold;
 }
 
-/* 각 게시글 제목 스타일 */
 .board-title {
 	width: 400px;
-	/* 게시글 제목의 너비 설정 */
 	display: inline-block;
 	text-overflow: ellipsis;
-	/* 긴 제목은 생략(...) 표시 */
 	overflow: hidden;
 	white-space: nowrap;
 	margin-left: 50px;
 }
 
-/* 각 작성자 스타일 */
 .board-author {
-	width: 120px;
-	/* 작성자의 너비 설정 */
+	width: 20px;
 	display: inline-block;
-	margin-left: 18px;
+	margin-left: 1px;
 }
 
-/* 각 추천 수 스타일 */
 .board-good {
 	width: 80px;
-	/* 추천 수의 너비 설정 */
 	display: inline-block;
 	margin-left: 90px;
 }
 
-/* 각 조회수 스타일 */
 .board-readCount {
 	width: 80px;
-	/* 조회수의 너비 설정 */
+	display: inline-block;
+	margin-left: 110px;
+}
+
+.board-title1 {
+	width: 400px;
+	display: inline-block;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	margin-left: 150px;
+}
+
+.board-author1 {
+	width: 20px;
+	display: inline-block;
+	margin-left: 1px;
+}
+
+.board-good1 {
+	width: 80px;
+	display: inline-block;
+	margin-left: 110px;
+}
+
+.board-readCount1 {
+	width: 80px;
 	display: inline-block;
 	margin-left: 110px;
 }
 
 
-
-
 .board-number-category {
-	margin-right: 150px;
+	margin-right: 30px;
 }
 
 .board-title-category {
-	margin-left: 10px;
+	margin-left: 50px;
 }
 
 .board-author-category {
-	margin-left: 150px;
+	margin-left: 280px;
 }
 
 .board-good-category {
-	margin-left: 80px;
+	margin-left: 20px;
 }
 
 .board-readCount-category {
@@ -238,4 +253,39 @@ li {
 .custom-recommend-btn:hover {
 	background-color: #d63322 !important;
 	border-color: #d63322 !important;
+}
+
+
+.pagination-container {
+    margin-top: 20px !important;
+    text-align: center !important; 
+}
+
+.pagination-button {
+	width: 5px;
+    display: inline-block !important;
+    padding: 8px 16px !important;
+    margin-right: 5px !important;
+    background-color: rgb(255, 255, 255) !important;
+    color: rgb(0, 0, 0) !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.pagination-button:hover {
+    background-color: #0056b3 !important;
+}
+
+.pagination-button:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+}
+
+.pagination-button.active {
+    background-color: #0056b3 !important;
+}
+
+.pagination-button:focus {
+    outline: none !important;
 }

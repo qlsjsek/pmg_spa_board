@@ -77,10 +77,10 @@ public class BoardServiceImpl implements BoardService{
 		}
 	}
 
-	@Override
-	public List<Board> findBoardListByDesc() {
-		return boardRepository.findAllByOrderByCreatedTimeDesc();
-	}
+	/*
+	 * @Override public List<Board> findBoardListByDesc() { return
+	 * boardRepository.findAllByOrderByCreatedTimeDesc(); }
+	 */
 	@Override
 	public List<Board> findBoardListByAsc() {
 		return boardRepository.findAllByOrderByCreatedTimeAsc();
@@ -108,7 +108,7 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public Page<Board> getBoardList(Pageable pageable) {
-		return boardRepository.findAll(pageable);
+		return boardRepository.findAllByOrderByCreatedTimeDesc(pageable);
 	}
 
 	@Override
@@ -138,6 +138,18 @@ public class BoardServiceImpl implements BoardService{
 			Board board = optionalBoard.get();
 			if (board.getUser() != null) {
 				return board.getUser().getUserId();
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String findCategoryNameByBoardId(Long boardId) {
+		Optional<Board> optionalBoard = boardRepository.findById(boardId);
+		if(optionalBoard.isPresent()) {
+			Board board = optionalBoard.get();
+			if (board.getBoardCategory() != null) {
+				return board.getBoardCategory().getCategoryName();
 			}
 		}
 		return null;

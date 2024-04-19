@@ -25,13 +25,15 @@ import jakarta.servlet.http.HttpSession;
 public class UserRestController {
 	@Autowired
 	private UserService userService;
-		
+	
+	//회원가입
 	@PostMapping("/signup")
 	public ResponseEntity<String> signUpUser(@RequestBody UserDto userDto) {
 		userService.createUser(userDto);
 		return ResponseEntity.ok("회원가입 성공");
 	}
 	
+	//로그인
 	@PostMapping("/login")
 	public ResponseEntity<UserDto> loginUser(@RequestBody UserDto userDto, HttpSession session){
 		User loginUser = userService.loginUser(userDto.getUserId(), userDto.getUserPassword());
@@ -44,12 +46,14 @@ public class UserRestController {
 		}
 	}
 	
+	//로그아웃
 	@PostMapping("/logout")
 	public ResponseEntity<?> logoutUser(HttpSession session) {
 		session.invalidate();
 		return ResponseEntity.ok().build();
 	}
 	
+	//삭제
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> deleteUser(@PathVariable(value = "id") Long id, HttpSession session) {
 		User user = userService.findUserById(id);
@@ -62,6 +66,7 @@ public class UserRestController {
 		}
 	}
 	
+	//회원정보수정
 	@PutMapping("/update/{userId}")
 	public ResponseEntity<String> updateUser(@PathVariable("userId") String userId, @RequestBody UserDto userDto) {
 		User user = userService.findUserByUserId(userId);
@@ -77,18 +82,21 @@ public class UserRestController {
 		}
 	}
 	
+	//아이디중복체크
 	@GetMapping("/duplicate/{userId}")
 	public ResponseEntity<Boolean> checkDuplicationUserId(@PathVariable("userId") String userId) {
 		boolean duplicate = userService.isUserIdDuplicate(userId);
 		return ResponseEntity.ok(duplicate);
 	}
 	
+	//비밀번호 일치 여부
 	@GetMapping("/confirm/{userId}/{userPassword}")
 	public ResponseEntity<Boolean> isPasswordConfirm(@PathVariable("userId") String userId, @PathVariable("userPassword") String userPassword) {
 		boolean isPasswordMatch = userService.isPasswordConfirmByUserId(userId, userPassword);
 		return ResponseEntity.ok(isPasswordMatch);
 	}
 	
+	//id찾기
 	@GetMapping("/find/userId")
 	public ResponseEntity<String> findUserIdByUserNameAndUserPhone(@RequestParam("userName") String userName, @RequestParam("userPhone") String userPhone) {
 		String userId = userService.findUserIdByUserNameAndUserPhone(userName, userPhone);
@@ -99,6 +107,7 @@ public class UserRestController {
 		}
 	}
 	
+	//비밀번호찾기
 	@GetMapping("/find/userPassword")
 	public ResponseEntity<String> findUserPasswordByUserIdAndUserPhone(@RequestParam("userId") String userId, @RequestParam("userPhone") String userPhone) {
 		String userPassword = userService.findUserPasswordByUserIdAndUserPhone(userId, userPhone);

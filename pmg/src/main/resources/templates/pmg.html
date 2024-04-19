@@ -192,14 +192,14 @@
 					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
 					<button onclick="searchBoard()">검색</button>
 				</div>
-				<div class="form-group">
+	<!--			<div class="form-group">
 					<label for="sort">정렬:</label>
-					<select id="sorting">
+					<select id="sorting" onchange="getBoardsBySorting()"> 
 						<option value="#">선택</option>
 						<option value="createdTimeDesc">최신순</option>
 						<option value="createdTimeAsc">오래된순</option>
 					</select>
-				</div>
+				</div>-->
 				<ul id="boardList">
 					<li>
 						<span class="board-number-category">분류</span>
@@ -213,7 +213,7 @@
 						<input type="hidden" id="boardListContent" th:value="${board.boardContent}">
 						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)"
 							th:data-board-id="${board.boardId}" th:text="${board.boardTitle}">제목</a>
-						<span class="board-author">작성자1</span>
+						<span class="board-author" id="createUserId" th:text="${board.user.userId}">작성자1</span>
 						<span class="board-good" th:text="${board.boardRecommend}">10</span>
 						<span class="board-readCount" th:text="${board.boardReadCount}"></span>
 					</li>
@@ -227,14 +227,6 @@
 			<!-- 게시판 자유 리스트  -->
 			<div id="boardFreeListPage" style="display: none;">
 				<h2>자유 게시글</h2>
-				<div class="select-box">
-					<label for="sort">정렬:</label>
-					<select id="sorting">
-						<option value="#">선택</option>
-						<option value="createdTimeDesc">최신순</option>
-						<option value="createdTimeAsc">오래된순</option>
-					</select>
-				</div>
 				<ul>
 					<li>
 						<span class="board-number-category">번호</span>

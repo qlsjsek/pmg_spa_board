@@ -98,18 +98,32 @@ function goToBoardDetail(event) {
 			console.error('Error:', error);
 		});
 }
-
+//board에서 userId 찾기
 function findUserIdByBoardId(boardId) {
 	return fetch(`/api/board/userId/${boardId}`)
 		.then(response => {
 			if (response.ok) {
 				return response.text();
 			} else {
-				throw new Error('게시물 작성자 정보를 가져오는데 실패했습니다.');
+				throw new Error('게시물 작성자 정보를 가져오는데 실패했습니다');
 			}
 		})
 		.catch(error => {
-			throw new Error('게시물 작성자 정보를 가져오는데 실패했습니다.');
+			throw new Error('게시물 작성자 정보를 가져오는데 실패했습니다');
+		});
+}
+//board에서 categoryName 찾기
+function findBoardCategoryNameByBoardId(boardId) {
+	return fetch(`/api/board/categoryName/${boardId}`)
+		.then(response => {
+			if (response.ok) {
+				return response.text();
+			} else {
+				throw new Error('카테고리 이름을 가져오는데 실패했습니다');
+			}
+		})
+		.catch(error => {
+			throw new Error('카테고리 이름을 가져오는데 실패했습니다');
 		});
 }
 
@@ -241,28 +255,34 @@ function freeBoardByCategortId() {
                 <span class="board-readCount-category">조회수</span>
             `;
 			boardListContainer.appendChild(tableHeader);;
-
 			boards.forEach((board, index) => {
-				const listItem = document.createElement('li');
-				listItem.innerHTML = `
-                    <span class="board-number">${index + 1}</span>
-                    <input type="hidden" id="boardListContent" value="${board.boardContent}">
-                    <a href="#" class="board-title" onclick="goToBoardDetail(event)" 
-                       data-board-id="${board.boardId}" 
-                       data-board-title="${board.boardTitle}">
-                       ${board.boardTitle}
-                    </a>
-                    <span class="board-author"></span>
-                    <span class="board-good">${board.boardRecommend}</span>
-                    <span class="board-readCount">${board.boardReadCount}</span>
-                `;
-				boardListContainer.appendChild(listItem);
-				document.getElementById('boardListPage').style.display = 'none';
-				document.getElementById('boardFreeListPage').style.display = 'block';
+				findUserIdByBoardId(board.boardId)
+					.then(userId => {
+						const listItem = document.createElement('li');
+						listItem.innerHTML = `
+                            <span class="board-number1">${index + 1}</span>
+                            <input type="hidden" id="boardListContent" value="${board.boardContent}">
+                            <a href="#" class="board-title1" onclick="goToBoardDetail(event)" 
+                               data-board-id="${board.boardId}" 
+                               data-board-title="${board.boardTitle}">
+                               ${board.boardTitle}
+                            </a>
+                            <span class="board-author1">${userId}</span>
+                            <span class="board-good1">${board.boardRecommend}</span>
+                            <span class="board-readCount1">${board.boardReadCount}</span>
+                        `;
+						boardListContainer.appendChild(listItem);
+					})
+					.catch(error => {
+						console.error('게시글 작성자 정보를 가져오는데 실패했습니다', error);
+					});
 			});
+
+			document.getElementById('boardListPage').style.display = 'none';
+			document.getElementById('boardFreeListPage').style.display = 'block';
 		})
 		.catch(error => {
-			console.error('Error : ', error);
+			console.error('게시글을 가져오는데 실패했습니다', error);
 		});
 }
 //질문게시판 리스트
@@ -290,26 +310,33 @@ function questionBoardByCategortId() {
 			boardListContainer.appendChild(tableHeader);;
 
 			boards.forEach((board, index) => {
-				const listItem = document.createElement('li');
-				listItem.innerHTML = `
-                    <span class="board-number">${index + 1}</span>
-                    <input type="hidden" id="boardListContent" value="${board.boardContent}">
-                    <a href="#" class="board-title" onclick="goToBoardDetail(event)" 
-                       data-board-id="${board.boardId}" 
-                       data-board-title="${board.boardTitle}">
-                       ${board.boardTitle}
-                    </a>
-                    <span class="board-author"></span>
-                    <span class="board-good">${board.boardRecommend}</span>
-                    <span class="board-readCount">${board.boardReadCount}</span>
-                `;
-				boardListContainer.appendChild(listItem);
-				document.getElementById('boardListPage').style.display = 'none';
-				document.getElementById('boardQuestionListPage').style.display = 'block';
+				findUserIdByBoardId(board.boardId)
+					.then(userId => {
+						const listItem = document.createElement('li');
+						listItem.innerHTML = `
+                            <span class="board-number1">${index + 1}</span>
+                            <input type="hidden" id="boardListContent" value="${board.boardContent}">
+                            <a href="#" class="board-title1" onclick="goToBoardDetail(event)" 
+                               data-board-id="${board.boardId}" 
+                               data-board-title="${board.boardTitle}">
+                               ${board.boardTitle}
+                            </a>
+                            <span class="board-author1">${userId}</span>
+                            <span class="board-good1">${board.boardRecommend}</span>
+                            <span class="board-readCount1">${board.boardReadCount}</span>
+                        `;
+						boardListContainer.appendChild(listItem);
+					})
+					.catch(error => {
+						console.error('게시글 작성자 정보를 가져오는데 실패했습니다', error);
+					});
 			});
+
+			document.getElementById('boardListPage').style.display = 'none';
+			document.getElementById('boardQuestionListPage').style.display = 'block';
 		})
 		.catch(error => {
-			console.error('Error : ', error);
+			console.error('게시글을 가져오는데 실패했습니다', error);
 		});
 }
 //기타게시판 리스트
@@ -337,26 +364,33 @@ function restBoardByCategortId() {
 			boardListContainer.appendChild(tableHeader);;
 
 			boards.forEach((board, index) => {
-				const listItem = document.createElement('li');
-				listItem.innerHTML = `
-                    <span class="board-number">${index + 1}</span>
-                    <input type="hidden" id="boardListContent" value="${board.boardContent}">
-                    <a href="#" class="board-title" onclick="goToBoardDetail(event)" 
-                       data-board-id="${board.boardId}" 
-                       data-board-title="${board.boardTitle}">
-                       ${board.boardTitle}
-                    </a>
-                    <span class="board-author"></span>
-                    <span class="board-good">${board.boardRecommend}</span>
-                    <span class="board-readCount">${board.boardReadCount}</span>
-                `;
-				boardListContainer.appendChild(listItem);
-				document.getElementById('boardListPage').style.display = 'none';
-				document.getElementById('boardRestListPage').style.display = 'block';
+				findUserIdByBoardId(board.boardId)
+					.then(userId => {
+						const listItem = document.createElement('li');
+						listItem.innerHTML = `
+                            <span class="board-number1">${index + 1}</span>
+                            <input type="hidden" id="boardListContent" value="${board.boardContent}">
+                            <a href="#" class="board-title1" onclick="goToBoardDetail(event)" 
+                               data-board-id="${board.boardId}" 
+                               data-board-title="${board.boardTitle}">
+                               ${board.boardTitle}
+                            </a>
+                            <span class="board-author1">${userId}</span>
+                            <span class="board-good1">${board.boardRecommend}</span>
+                            <span class="board-readCount1">${board.boardReadCount}</span>
+                        `;
+						boardListContainer.appendChild(listItem);
+					})
+					.catch(error => {
+						console.error('게시글 작성자 정보를 가져오는데 실패했습니다', error);
+					});
 			});
+
+			document.getElementById('boardListPage').style.display = 'none';
+			document.getElementById('boardRestListPage').style.display = 'block';
 		})
 		.catch(error => {
-			console.error('Error : ', error);
+			console.error('게시글을 가져오는데 실패했습니다', error);
 		});
 }
 
@@ -367,7 +401,6 @@ function searchBoard() {
 	if (!searchInput) {
 		return;
 	}
-	debugger;
 	fetch(`/api/board/searchByTitle?keyword=${searchInput}`)
 		.then(response => {
 			if (response.ok) {
@@ -435,37 +468,83 @@ function increaseReadCount(boardId) {
 function recommend() {
 	var boardId = document.getElementById('boardDetailId').value;
 	var recommendCountElement = document.getElementById('boardDetailRecommend');
-	var recommendCount = parseInt(recommendCountElement.innerText) + 1;
-	fetch(`/api/board/recommend/${boardId}?boardRecommend=${recommendCount}`, {
-		method: 'PUT',
-	})
-		.then(response => {
-			if (response.ok) {
-				return response.text();
-			} else {
-				throw new Error('추천 실패');
-			}
-		})
-		.then(message => {
-			console.log(message);
-			const recommendCountElement = document.getElementById('boardDetailRecommend');
-			var recommendCount = parseInt(recommendCountElement.innerText);
-			recommendCount++;
-			recommendCountElement.innerText = recommendCount;
+	var recommendCount = parseInt(recommendCountElement.innerText);
 
+	findUserIdByBoardId(boardId)
+		.then(userId => {
+			console.log('게시물 작성자 userId:', userId);
+
+			const userIdElement = document.getElementById('detailUserId');
+			const detailUserId = userIdElement ? userIdElement.value : null;
+
+			console.log('detailUserId:', detailUserId);
+
+			if (detailUserId === userId) {
+				alert('자신의 글은 추천할 수 없습니다');
+				return;
+			} else if (!detailUserId || detailUserId === null) {
+				alert('회원만 추천할 수 있습니다');
+				return;
+			}
+			var isRecommended = localStorage.getItem(`recommended_${boardId}`);
+			var newRecommendCount = recommendCount;
+
+			if (isRecommended === 'true') {
+				newRecommendCount--;
+				localStorage.removeItem(`recommended_${boardId}`);
+			} else {
+				newRecommendCount++;
+				localStorage.setItem(`recommended_${boardId}`, 'true');
+			}
+
+			recommendCountElement.innerText = newRecommendCount;
+
+			fetch(`/api/board/recommend/${boardId}?boardRecommend=${newRecommendCount}`, {
+				method: 'PUT',
+			})
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('추천 업데이트에 실패했습니다.');
+					}
+					return response.text();
+				})
+				.then(message => {
+					console.log(message);
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
 		})
 		.catch(error => {
-			console.error('Error :', error);
+			console.error('Error:', error);
 		});
 }
 
-
+/*
 //전체 게시글 정렬
+function getBoardsBySorting() {
+	const sorting = document.getElementById('sorting').value;
+	if (sorting === '#') {
+		return;
+	}
 
+	fetch(`/api/board/sorting?sorting=${sorting}`)
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('정렬실패');
+			}
+			return response.json();
+		})
+		.then(data => {
+			displayBoardList(data);
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+}
+*/
 
-
-
-//페이징
+//게시판 전체 리스트 페이징
 $(document).ready(function() {
 	loadBoardList(0);
 
@@ -497,7 +576,7 @@ function loadBoardList(page, searchText = '') {
 			renderPagination(response.totalPages, page);
 		},
 		error: function(err) {
-			console.error('Error fetching board list:', err);
+			console.error('Error :', err);
 		}
 	});
 }
@@ -506,18 +585,44 @@ function displayBoardList(boards) {
 	const boardList = $('#boardList');
 	boardList.empty();
 
+	const headerItem = `
+        <li class = "board-item">
+            <span class="board-number-category">분류</span>
+            <span class="board-title-category">제목</span>
+            <span class="board-author-category">작성자</span>
+            <span class="board-good-category">추천</span>
+            <span class="board-readCount-category">조회수</span>
+        </li>`;
+	boardList.append(headerItem);
+	boards.sort((a, b) => b.boardId - a.boardId);
 	boards.forEach(board => {
-		console.log(board);
-		const categoryName = board.boardCategory ? board.boardCategory.categoryName : '카테고리 없음';
-		const userId = board.User ? board.User.userId : '사용자 없음';
-		const listItem = `<li>
+		Promise.all([
+			findUserIdByBoardId(board.boardId),
+			findBoardCategoryNameByBoardId(board.boardId)
+		])
+			.then(([userId, categoryName]) => {
+				const listItem = `
+                <li class = "board-item">
                     <span class="board-number-category">${categoryName}</span>
                     <a href="#" class="board-title" onclick="goToBoardDetail(event)" data-board-id="${board.boardId}">${board.boardTitle}</a>
                     <span class="board-author">${userId}</span>
                     <span class="board-good">${board.boardRecommend}</span>
                     <span class="board-readCount">${board.boardReadCount}</span>
                 </li>`;
-		boardList.append(listItem);
+				boardList.append(listItem);
+			})
+			.catch(error => {
+				console.error('게시글 정보를 가져오는데 실패했습니다.', error);
+				const listItem = `
+                <li class = "board-item">
+                    <span class="board-number-category">${categoryName}</span>
+                    <a href="#" class="board-title" onclick="goToBoardDetail(event)" data-board-id="${board.boardId}">${board.boardTitle}</a>
+                    <span class="board-author">${userId}</span>
+                    <span class="board-good">${board.boardRecommend}</span>
+                    <span class="board-readCount">${board.boardReadCount}</span>
+                </li>`;
+				boardList.append(listItem);
+			});
 	});
 }
 
@@ -527,12 +632,10 @@ function renderPagination(totalPages, currentPage) {
 
 	for (let i = 0; i < totalPages; i++) {
 		const pageNumber = i + 1;
-		const button = `<button onclick="loadBoardList(${i})" ${pageNumber === currentPage + 1 ? 'disabled' : ''}>${pageNumber}</button>`;
+		const button = `<button class="pagination-button" onclick="loadBoardList(${i})" ${pageNumber === currentPage + 1 ? 'disabled' : ''}>${pageNumber}</button>`;
 		pagination.append(button);
 	}
 }
-
-
 
 
 

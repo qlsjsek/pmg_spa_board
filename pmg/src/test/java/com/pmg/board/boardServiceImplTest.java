@@ -66,14 +66,17 @@ public class boardServiceImplTest extends PmgApplicationTests {
 		System.out.println("게시글 수정 확인 -->" + board);
 	}
 	
-	@Test
-	@Transactional
-	@Disabled
-	@Rollback(false)
-	void findBoardList() {
-		List<Board> boardList = boardService.findBoardListByDesc();
-		System.out.println("게시글 리스트 확인 -->"+boardList);
-	}
+	/*
+	 * @Test
+	 * 
+	 * @Transactional
+	 * 
+	 * @Disabled
+	 * 
+	 * @Rollback(false) void findBoardList() { List<Board> boardList =
+	 * boardService.findBoardListByDesc();
+	 * System.out.println("게시글 리스트 확인 -->"+boardList); }
+	 */
 	
 	@Test
 	@Transactional

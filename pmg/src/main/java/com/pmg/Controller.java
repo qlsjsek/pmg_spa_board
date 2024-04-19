@@ -32,7 +32,7 @@ public class Controller {
 		}
 		List<BoardCategory> categories =  boardService.findCategories();
 		model.addAttribute("categories",categories);
-		List<Board> boards = boardService.findBoardListByDesc();
+		List<Board> boards = boardService.findBoardListByAsc();
 		model.addAttribute("boards",boards);
 		String forwardPath = "pmg";
 		return forwardPath;
