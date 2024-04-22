@@ -40,5 +40,7 @@ public interface BoardService {
 	public String findUserIdByBoardId(Long boardId);
 	//boardId로 categoryName찾기
 	public String findCategoryNameByBoardId(Long boardId);
+	//boardId로 추천수 찾기
+	public int findRecommendCountByBoardId(Long boardId);
 	
 }

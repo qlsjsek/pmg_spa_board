@@ -1,6 +1,7 @@
 //회원가입
 let isDuplicateChecked = false;
 function signUp() {
+	document.getElementById('userId').disabled = false;
 	var userId = document.getElementById("userId").value;
 	var userPassword = document.getElementById("userPassword").value;
 	var confirmPassword = document.getElementById("confirmPassword").value;
@@ -67,6 +68,7 @@ function signUp() {
 }
 //회원가입 시 중복체크
 function checkDuplicate() {
+	var userInput = document.getElementById('userId');
 	var userId = document.getElementById("userId").value;
 	if (!userId) {
 		alert("아이디를 입력해주세요");
@@ -89,6 +91,7 @@ function checkDuplicate() {
 			} else {
 				alert('사용 가능한 아이디입니다.');
 				isDuplicateChecked = true;
+				userInput.disabled = true;
 			}
 		})
 		.catch(error => {
@@ -153,6 +156,7 @@ function updateUser() {
 
 //회원정보수정 비밀번호 인증
 function confirmPassword() {
+	var beforeUpdateUserPasswordInput = document.getElementById('beforeUpdateUserPassword');
 	var userId = document.getElementById('updateUserId').value;
 	var confirmUserPassword = document.getElementById('confirmUserPassword').value;
 	var userPassword = document.getElementById('beforeUpdateUserPassword').value;
@@ -173,6 +177,7 @@ function confirmPassword() {
 				if (userPassword === confirmUserPassword) {
 					alert('비밀번호가 일치합니다. 인증 성공!');
 					checkConfirmPassword = true;
+					beforeUpdateUserPasswordInput.disabled = true;
 
 				} else {
 					alert('비밀번호가 일치하지 않습니다.');

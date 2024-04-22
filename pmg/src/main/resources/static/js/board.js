@@ -465,19 +465,15 @@ function increaseReadCount(boardId) {
 
 
 //게시글 추천
-function recommend() {
+/*function recommend() {
 	var boardId = document.getElementById('boardDetailId').value;
 	var recommendCountElement = document.getElementById('boardDetailRecommend');
 	var recommendCount = parseInt(recommendCountElement.innerText);
 
 	findUserIdByBoardId(boardId)
 		.then(userId => {
-			console.log('게시물 작성자 userId:', userId);
-
 			const userIdElement = document.getElementById('detailUserId');
 			const detailUserId = userIdElement ? userIdElement.value : null;
-
-			console.log('detailUserId:', detailUserId);
 
 			if (detailUserId === userId) {
 				alert('자신의 글은 추천할 수 없습니다');
@@ -518,7 +514,76 @@ function recommend() {
 		.catch(error => {
 			console.error('Error:', error);
 		});
+}*/
+function recommend() {
+	var userIdElement = document.getElementById('detailUserId');
+	var userId = userIdElement ? userIdElement.value : null;
+	var boardId = document.getElementById('boardDetailId').value;
+	findUserIdByBoardId(boardId)
+		.then(writerUserId => {
+			if (userId === writerUserId) {
+				alert('자신의 글은 추천할 수 없습니다');
+				return;
+			}
+			if (userId === null || !userId) {
+				alert('회원만 추천할 수 있습니다');
+				return;
+			}
+			findRecommendCount(boardId)
+				.then(recommendCount => {
+					var recommendElement = document.getElementById('boardDetailRecommend');
+					var recommendedKey = 'recommend_' + boardId + '_' + userId;
+					var recommended = localStorage.getItem(recommendedKey);
+					if (recommended === 'true') {
+						recommendCount--;
+						localStorage.removeItem(recommendedKey);
+					} else {
+						recommendCount++;
+						localStorage.setItem(recommendedKey, 'true');
+					}
+					recommendElement.innerText = recommendCount;
+					console.log(recommendElement);
+					fetch(`/api/board/recommend/${boardId}?boardRecommend=${recommendCount}`, {
+						method: 'PUT',
+					})
+						.then(response => {
+							if (!response.ok) {
+								throw new Error('추천 실패');
+							} else {
+								return response.text();
+							}
+						})
+						.catch(error => {
+							console.error('Error :', error);
+						});
+				})
+		})
 }
+//추천수 찾기
+function findRecommendCount(boardId) {
+	return fetch(`/api/board/recommendCount/${boardId}`)
+		.then(response => {
+			if (response.ok) {
+				return response.text();
+			} else {
+				throw new Error('추천수 정보를 가져오는데 실패했습니다.');
+			}
+		})
+		.then(recommendCountStr => {
+			const recommendCount = parseInt(recommendCountStr);
+			if (!isNaN(recommendCount)) {
+				return recommendCount;
+			} else {
+				throw new Error('유효하지 않은 추천수입니다.');
+			}
+		})
+		.catch(error => {
+			throw new Error('추천수 정보를 가져오는데 실패했습니다', error);
+		});
+}
+
+
+
 
 /*
 //전체 게시글 정렬

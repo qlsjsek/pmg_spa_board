@@ -23,7 +23,7 @@ import com.pmg.user.repository.UserRepository;
 
 @Service
 @Transactional
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl implements BoardService {
 	@Autowired
 	BoardCategoryRepository boardCategoryRepository;
 	@Autowired
@@ -32,32 +32,30 @@ public class BoardServiceImpl implements BoardService{
 	BoardImageService boardImageService;
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Override
 	public List<BoardCategory> findCategories() {
 		return boardCategoryRepository.findAll();
 	}
 
 	@Override
-    public Board createBoard(BoardDto boardDto, BoardImageDto boardImageDto,String userId) {
+	public Board createBoard(BoardDto boardDto, BoardImageDto boardImageDto, String userId) {
 		Optional<User> optionalUser = userRepository.findByUserId(userId);
 		if (optionalUser.isEmpty()) {
-			throw new  RuntimeException("사용자를 찾을 수 없습니다:"+userId);
+			throw new RuntimeException("사용자를 찾을 수 없습니다:" + userId);
 		}
-        Board board = Board.builder()
-                .boardCategory(BoardCategory.builder().categoryId(boardDto.getCategoryId()).build())
-                .boardTitle(boardDto.getBoardTitle())
-                .boardContent(boardDto.getBoardContent())
-                .user(optionalUser.get())
-                .build();
-        board = boardRepository.save(board);
+		Board board = Board.builder()
+				.boardCategory(BoardCategory.builder().categoryId(boardDto.getCategoryId()).build())
+				.boardTitle(boardDto.getBoardTitle()).boardContent(boardDto.getBoardContent()).user(optionalUser.get())
+				.build();
+		board = boardRepository.save(board);
 
-        if (boardImageDto != null) {
-            boardImageService.uploadImage(board.getBoardId(), boardImageDto);
-        }
+		if (boardImageDto != null) {
+			boardImageService.uploadImage(board.getBoardId(), boardImageDto);
+		}
 
-        return board;
-    }
+		return board;
+	}
 
 	@Override
 	public void deleteBoard(Long boardId) {
@@ -114,7 +112,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public void increaseReadCount(Long boardId) {
 		Optional<Board> optionalBoard = boardRepository.findById(boardId);
-		if(optionalBoard.isPresent()) {
+		if (optionalBoard.isPresent()) {
 			Board board = optionalBoard.get();
 			board.setBoardReadCount(board.getBoardReadCount() + 1);
 			boardRepository.save(board);
@@ -124,7 +122,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public void updateRecommendCount(Long boardId, int boardRecommend) {
 		Optional<Board> optionalBoard = boardRepository.findById(boardId);
-		if(optionalBoard.isPresent()) {
+		if (optionalBoard.isPresent()) {
 			Board board = optionalBoard.get();
 			board.setBoardRecommend(boardRecommend);
 			boardRepository.save(board);
@@ -146,13 +144,23 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public String findCategoryNameByBoardId(Long boardId) {
 		Optional<Board> optionalBoard = boardRepository.findById(boardId);
-		if(optionalBoard.isPresent()) {
+		if (optionalBoard.isPresent()) {
 			Board board = optionalBoard.get();
 			if (board.getBoardCategory() != null) {
 				return board.getBoardCategory().getCategoryName();
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public int findRecommendCountByBoardId(Long boardId) {
+		Optional<Board> optionalBoard = boardRepository.findById(boardId);
+		if (optionalBoard.isPresent()) {
+			Board board = optionalBoard.get();
+			return board.getBoardRecommend();
+		}
+		return 0;
 	}
 
 }

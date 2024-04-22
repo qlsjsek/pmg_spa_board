@@ -3,6 +3,7 @@ package com.pmg.user.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,8 @@ import jakarta.persistence.EntityNotFoundException;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Override
 	public User createUser(UserDto userDto) {
@@ -26,7 +29,8 @@ public class UserServiceImpl implements UserService {
 		if (optionalUser.isPresent()) {
 			throw new RuntimeException("이미 존재하는 ID 입니다.");
 		} else {
-			User user = User.builder().userId(userDto.getUserId()).userPassword(userDto.getUserPassword())
+			String encodePw = passwordEncoder.encode(userDto.getUserPassword());
+			User user = User.builder().userId(userDto.getUserId()).userPassword(encodePw)
 					.userName(userDto.getUserName()).userAddress(userDto.getUserAddress())
 					.userPhone(userDto.getUserPhone()).userBirthDate(userDto.getUserBirthDate())
 					.userEmail(userDto.getUserEmail()).build();
@@ -79,15 +83,25 @@ public class UserServiceImpl implements UserService {
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			if (user == null) {
+			/*	
 				UserNotFoundException exception = new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
 				exception.setData(User.builder().userId(userId).userPassword(userPassword).build());
 				throw exception;
+			*/
+				throw new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
 			}
+			String encryPtedPassword = user.getUserPassword();
+			boolean passwordMatches = passwordEncoder.matches(userPassword, encryPtedPassword);
+		/*
 			String userPw = user.getUserPassword();
 			if (!userPw.equals(userPassword)) {
 				PasswordMismatchException exception = new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
 				exception.setData(User.builder().userId(userId).userPassword(userPassword).build());
 				throw exception;
+			}
+			*/
+			if(!passwordMatches) {
+				throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
 			}
 			return user;
 		} else {

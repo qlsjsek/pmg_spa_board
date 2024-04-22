@@ -183,6 +183,13 @@ public class BoardRestController {
 		}
     }
     
+    //추천수 찾기
+    @GetMapping("/recommendCount/{boardId}")
+    public ResponseEntity<Integer> findBoardRecommendCountByBoardId(@PathVariable("boardId") Long boardId) {
+    	int recommendCount = boardService.findRecommendCountByBoardId(boardId);
+    	return ResponseEntity.ok(recommendCount);
+    }
+    
     
 
 }
