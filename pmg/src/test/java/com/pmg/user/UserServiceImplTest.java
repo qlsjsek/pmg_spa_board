@@ -94,4 +94,14 @@ public class UserServiceImplTest extends PmgApplicationTests {
 		System.out.println("찾은 비밀번호 : " + userPassword);
 	}
 	
-}
+	@Test
+	@Transactional
+	//@Disabled
+	@Rollback(false)
+	void resetUserPassword() {
+		String userId = "11";
+		String userPhone = "11";
+		String newPassword = "44";
+		userService.resetUserPasswordByUserIdAndUserPhone(userId, userPhone, newPassword);
+	}
+}	

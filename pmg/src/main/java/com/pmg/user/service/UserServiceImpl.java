@@ -45,16 +45,33 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User updateUser(String userId, UserDto userDto) {
-		Optional<User> optionalUser = userRepository.findByUserId(userId);
-		if (optionalUser.isPresent()) {
-			User updateUser = optionalUser.get();
-			updateUser.setUserPassword(userDto.getUserPassword());
-			updateUser.setUserPhone(userDto.getUserPhone());
-			updateUser.setUserEmail(userDto.getUserEmail());
-			return userRepository.save(updateUser);
-		} else {
-			throw new EntityNotFoundException("해당 아이디를 찾을 수 없습니다.");
-		}
+	    Optional<User> optionalUser = userRepository.findByUserId(userId);
+	    if (optionalUser.isPresent()) {
+	        User updateUser = optionalUser.get();
+	        
+	        // 비밀번호 업데이트
+	        String newPassword = userDto.getUserPassword();
+	        if (newPassword != null && !newPassword.isEmpty()) {
+	            updateUser.setUserPassword(passwordEncoder.encode(newPassword));
+	        }
+	        
+	        // 전화번호 업데이트
+	        String newPhone = userDto.getUserPhone();
+	        if (newPhone != null && !newPhone.isEmpty()) {
+	            updateUser.setUserPhone(newPhone);
+	        }
+	        
+	        // 이메일 업데이트
+	        String newEmail = userDto.getUserEmail();
+	        if (newEmail != null && !newEmail.isEmpty()) {
+	            updateUser.setUserEmail(newEmail);
+	        }
+	        
+	        // 업데이트된 사용자 정보 저장
+	        return userRepository.save(updateUser);
+	    } else {
+	        throw new EntityNotFoundException("해당 아이디를 찾을 수 없습니다.");
+	    }
 	}
 
 	@Override
@@ -120,12 +137,9 @@ public class UserServiceImpl implements UserService {
 		Optional<User> optionalUser = userRepository.findByUserId(userId);
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			String password = user.getUserPassword();
-			if (userPassword.equals(password)) {
-				return true;
-			} else {
-				return false;
-			}
+			String encodePw = user.getUserPassword();
+			boolean passwordMatches = passwordEncoder.matches(userPassword, encodePw);
+			return passwordMatches;
 		} else {
 			throw new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
 		}
@@ -151,6 +165,18 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new RuntimeException("사용자를 찾을 수 없습니다.");
 		}
+	}
+
+	@Override
+	public User resetUserPasswordByUserIdAndUserPhone(String userId, String userPhone, String newPassword) {
+	    Optional<User> optionalUser = userRepository.findByUserIdAndUserPhone(userId, userPhone);
+	    if (optionalUser.isPresent()) {
+	        User user = optionalUser.get();
+	        user.setUserPassword(passwordEncoder.encode(newPassword));
+	        return userRepository.save(user);
+	    } else {
+	        throw new UserNotFoundException(userId + "는 존재하지 않는 사용자입니다");
+	    }
 	}
 
 }

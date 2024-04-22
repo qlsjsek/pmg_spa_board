@@ -108,14 +108,20 @@ public class UserRestController {
 	}
 	
 	//비밀번호찾기
-	@GetMapping("/find/userPassword")
-	public ResponseEntity<String> findUserPasswordByUserIdAndUserPhone(@RequestParam("userId") String userId, @RequestParam("userPhone") String userPhone) {
-		String userPassword = userService.findUserPasswordByUserIdAndUserPhone(userId, userPhone);
-		if (userPassword != null && !userPassword.isEmpty()) {
-			return ResponseEntity.ok(userPassword);
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
-		}
+	/*
+	 * @GetMapping("/find/userPassword") public ResponseEntity<String>
+	 * findUserPasswordByUserIdAndUserPhone(@RequestParam("userId") String
+	 * userId, @RequestParam("userPhone") String userPhone) { String userPassword =
+	 * userService.findUserPasswordByUserIdAndUserPhone(userId, userPhone); if
+	 * (userPassword != null && !userPassword.isEmpty()) { return
+	 * ResponseEntity.ok(userPassword); } else { return
+	 * ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다."); } }
+	 */
+	//비밀번호 초기화
+	@PostMapping("/reset")
+	public ResponseEntity<String> resetPassword(@RequestParam("userId") String userId,@RequestParam("userPhone") String userPhone,@RequestParam("userPassword") String userPassword) {
+		userService.resetUserPasswordByUserIdAndUserPhone(userId,userPhone,userPassword);
+		return ResponseEntity.ok("비밀번호가 재설정 되었습니다.");
 	}
 	
 	

@@ -25,5 +25,8 @@ public interface UserService {
 	public String findUserIdByUserNameAndUserPhone(String userName, String userPhone);
 	//비밀번호 찾기
 	public String findUserPasswordByUserIdAndUserPhone(String userId, String userPhone);
+	//비밀번호 찾기 security버전
+	public User resetUserPasswordByUserIdAndUserPhone(String userId, String userPhone, String newPassword);
+	
 	
 }

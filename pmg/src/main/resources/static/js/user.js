@@ -160,6 +160,8 @@ function confirmPassword() {
 	var userId = document.getElementById('updateUserId').value;
 	var confirmUserPassword = document.getElementById('confirmUserPassword').value;
 	var userPassword = document.getElementById('beforeUpdateUserPassword').value;
+	console.log(userPassword);
+	console.log(confirmUserPassword);
 	if (!userPassword) {
 		alert('비밀번호를 입력해주세요');
 		return;
@@ -200,6 +202,7 @@ function confirmPassword() {
 function login() {
 	var userId = document.getElementById('loginUserId').value;
 	var userPassword = document.getElementById('loginUserPassword').value;
+	console.log(userPassword);
 	if (!userId || !userPassword) {
 		alert("아이디와 비밀번호를 입력하세요.");
 		return;
@@ -296,9 +299,9 @@ function findUserId() {
 		return;
 	}
 	var url = new URL(`/api/user/find/userId`, window.location.origin);
-    url.searchParams.append('userName', userName);
-    url.searchParams.append('userPhone', userPhone);
-    
+	url.searchParams.append('userName', userName);
+	url.searchParams.append('userPhone', userPhone);
+
 	fetch(url, {
 		method: 'GET',
 		headers: {
@@ -341,8 +344,8 @@ function findUserPassword() {
 		return;
 	}
 	var url = new URL(`/api/user/find/userPassword`, window.location.origin);
-    url.searchParams.append('userId', userId);
-    url.searchParams.append('userPhone', userPhone);
+	url.searchParams.append('userId', userId);
+	url.searchParams.append('userPhone', userPhone);
 
 	fetch(url, {
 		method: 'GET',
