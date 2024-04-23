@@ -42,5 +42,7 @@ public interface BoardService {
 	public String findCategoryNameByBoardId(Long boardId);
 	//boardId로 추천수 찾기
 	public int findRecommendCountByBoardId(Long boardId);
+	//categoryId로 리스트, 페이징
+	public Page<Board> getBoardsByCategoryId(Long categoryId, Pageable pageable);
 	
 }

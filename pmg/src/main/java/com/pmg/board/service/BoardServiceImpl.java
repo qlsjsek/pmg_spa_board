@@ -164,4 +164,9 @@ public class BoardServiceImpl implements BoardService {
 		return 0;
 	}
 
+	@Override
+	public Page<Board> getBoardsByCategoryId(Long categoryId, Pageable pageable) {
+		return boardRepository.findAllByBoardCategoryCategoryIdOrderByCreatedTimeDesc(categoryId, pageable);
+	}
+
 }

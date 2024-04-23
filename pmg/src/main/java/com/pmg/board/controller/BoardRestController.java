@@ -194,4 +194,12 @@ public class BoardRestController {
 		return ResponseEntity.ok(recommendCount);
 	}
 
+	// 카테고리id로 게시판 리스트 페이징
+	@GetMapping("/page/category")
+	public Page<Board> getBoardsByCategory(@RequestParam("categoryId") Long categoryId,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+		PageRequest pageable = PageRequest.of(page, size);
+		return boardService.getBoardsByCategoryId(categoryId, pageable);
+	}
+
 }

@@ -15,4 +15,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 	List<Board> findAllByOrderByCreatedTimeAsc();
 	List<Board> findByBoardCategoryCategoryIdOrderByCreatedTimeDesc(Long categoryId);
 	Page<Board> findAllByOrderByCreatedTimeDesc(Pageable pageable);
+	Page<Board> findAllByBoardCategoryCategoryIdOrderByCreatedTimeDesc(Long categoryId, Pageable pageable);
 }
