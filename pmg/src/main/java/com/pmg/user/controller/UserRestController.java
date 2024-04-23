@@ -90,8 +90,8 @@ public class UserRestController {
 	}
 	
 	//비밀번호 일치 여부
-	@GetMapping("/confirm/{userId}/{userPassword}")
-	public ResponseEntity<Boolean> isPasswordConfirm(@PathVariable("userId") String userId, @PathVariable("userPassword") String userPassword) {
+	@PostMapping("/confirm")
+	public ResponseEntity<Boolean> isPasswordConfirm(@RequestParam("userId") String userId, @RequestParam("userPassword") String userPassword) {
 		boolean isPasswordMatch = userService.isPasswordConfirmByUserId(userId, userPassword);
 		return ResponseEntity.ok(isPasswordMatch);
 	}

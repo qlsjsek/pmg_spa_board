@@ -42,7 +42,7 @@ public class UserServiceImplTest extends PmgApplicationTests {
 	
 	@Test
 	@Transactional
-	@Disabled
+	//@Disabled
 	@Rollback(false)
 	void updateUser() {
 		UserDto user = new UserDto();
@@ -50,7 +50,7 @@ public class UserServiceImplTest extends PmgApplicationTests {
 		user.setUserAddress("서울시 관악구");
 		user.setUserPhone("010-1234-1234");
 		user.setUserEmail("test9@naver.com");
-		User updateUser = userService.updateUser("test1", user);
+		User updateUser = userService.updateUser("zx", user);
 		System.out.println("업데이트 확인 --> "+ updateUser);
 	}
 	
@@ -96,7 +96,7 @@ public class UserServiceImplTest extends PmgApplicationTests {
 	
 	@Test
 	@Transactional
-	//@Disabled
+	@Disabled
 	@Rollback(false)
 	void resetUserPassword() {
 		String userId = "11";
@@ -104,4 +104,16 @@ public class UserServiceImplTest extends PmgApplicationTests {
 		String newPassword = "44";
 		userService.resetUserPasswordByUserIdAndUserPhone(userId, userPhone, newPassword);
 	}
+	
+	@Test
+	@Transactional
+	@Disabled
+	@Rollback(false)
+	void passwordConfirm() {
+		String userId = "zx";
+		String userPassword = "zx";
+		boolean password = userService.isPasswordConfirmByUserId(userId, userPassword);
+		System.out.println("일치여부 확인 : " + password);
+	}
+	
 }	

@@ -48,26 +48,22 @@ public class UserServiceImpl implements UserService {
 	    Optional<User> optionalUser = userRepository.findByUserId(userId);
 	    if (optionalUser.isPresent()) {
 	        User updateUser = optionalUser.get();
-	        
-	        // 비밀번호 업데이트
 	        String newPassword = userDto.getUserPassword();
 	        if (newPassword != null && !newPassword.isEmpty()) {
 	            updateUser.setUserPassword(passwordEncoder.encode(newPassword));
 	        }
-	        
-	        // 전화번호 업데이트
+	        String newAddress = userDto.getUserAddress();
+	        if(newAddress != null && !newAddress.isEmpty()) {
+	        	updateUser.setUserAddress(newAddress);
+	        }
 	        String newPhone = userDto.getUserPhone();
 	        if (newPhone != null && !newPhone.isEmpty()) {
 	            updateUser.setUserPhone(newPhone);
 	        }
-	        
-	        // 이메일 업데이트
 	        String newEmail = userDto.getUserEmail();
 	        if (newEmail != null && !newEmail.isEmpty()) {
 	            updateUser.setUserEmail(newEmail);
 	        }
-	        
-	        // 업데이트된 사용자 정보 저장
 	        return userRepository.save(updateUser);
 	    } else {
 	        throw new EntityNotFoundException("해당 아이디를 찾을 수 없습니다.");

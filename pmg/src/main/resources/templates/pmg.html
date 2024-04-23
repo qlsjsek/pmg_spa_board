@@ -121,10 +121,10 @@
 					<button onclick="confirmPassword()">비밀번호 인증</button>
 				</div>
 				<div class="form-group">
-					<input type="password" id="updatePassword" placeholder="변경할 비밀번호">
+					<input type="password" id="updatePassword" placeholder="변경할 비밀번호" disabled>
 				</div>
 				<div class="form-group">
-					<input type="password" id="updateConfirmPassword" placeholder="변경할 비밀번호 확인">
+					<input type="password" id="updateConfirmPassword" placeholder="변경할 비밀번호 확인" disabled>
 				</div>
 				<div class="form-group">
 					<input type="text" id="updateUserName" th:value="${loginUser.userName}" placeholder="이름" disabled>
@@ -134,13 +134,16 @@
 						disabled>
 				</div>
 				<div class="form-group">
-					<input type="text" id="updateUserPhone" th:value="${loginUser.userPhone}" placeholder="핸드폰번호">
+					<input type="text" id="updateUserPhone" th:value="${loginUser.userPhone}" placeholder="핸드폰번호"
+						disabled>
 				</div>
 				<div class="form-group">
-					<input type="text" id="updateUserAddress" th:value="${loginUser.userAddress}" placeholder="주소">
+					<input type="text" id="updateUserAddress" th:value="${loginUser.userAddress}" placeholder="주소"
+						disabled>
 				</div>
 				<div class="form-group">
-					<input type="text" id="updateUserEmail" th:value="${loginUser.userEmail}" placeholder="이메일">
+					<input type="text" id="updateUserEmail" th:value="${loginUser.userEmail}" placeholder="이메일"
+						disabled>
 				</div>
 
 				<div class="form-group">
@@ -192,9 +195,9 @@
 					<input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
 					<button onclick="searchBoard()">검색</button>
 				</div>
-	<!--			<div class="form-group">
+<!--				<div class="form-group">
 					<label for="sort">정렬:</label>
-					<select id="sorting" onchange="getBoardsBySorting()"> 
+					<select id="sorting" onchange="getBoardsBySorting()">
 						<option value="#">선택</option>
 						<option value="createdTimeDesc">최신순</option>
 						<option value="createdTimeAsc">오래된순</option>
@@ -202,23 +205,25 @@
 				</div>-->
 				<ul id="boardList">
 					<li>
-						<span class="board-number-category">분류</span>
+						<span class="board-category-category">분류</span>
+						<span class="board-number-category">번호</span>
 						<span class="board-title-category">제목</span>
 						<span class="board-author-category">작성자</span>
 						<span class="board-good-category">추천</span>
 						<span class="board-readCount-category">조회수</span>
 					</li>
 					<li th:each="board : ${boards}" th:attr="data-writer-id=${board.User.userId}">
-						<span class="board-number" th:text="${board.boardCategory.categoryName}">1</span>
+						<span class="board-category" th:text="${board.boardCategory.categoryName}">1</span>
+						<span class="board-number" th:text="${board.boardId}">1</span>
 						<input type="hidden" id="boardListContent" th:value="${board.boardContent}">
 						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)"
 							th:data-board-id="${board.boardId}" th:text="${board.boardTitle}">제목</a>
-						<span class="board-author" id="createUserId" th:text="${board.user.userId}">작성자1</span>
+						<span class="board-author" id="createUserId" th:text="${board.user.userId}">1</span>
 						<span class="board-good" th:text="${board.boardRecommend}">10</span>
 						<span class="board-readCount" th:text="${board.boardReadCount}"></span>
 					</li>
 				</ul>
-	
+
 				<div id="pagination" class="pagination-container"></div>
 				<div class="form-group">
 					<button onclick="goToWriteBoard()">작성하기</button>
@@ -239,7 +244,6 @@
 						<span class="board-number">1</span>
 						<input type="hidden" id="boardListContent">
 						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)">제목</a>
-						<span class="board-author">작성자1</span>
 						<span class="board-good">10</span>
 						<span class="board-readCount">10</span>
 					</li>
@@ -263,7 +267,7 @@
 						<span class="board-number">1</span>
 						<input type="hidden" id="boardListContent">
 						<a href="#" id="boardListTitle" class="board-title" onclick="goToBoardDetail(event)">제목</a>
-						<span class="board-author">작성자1</span>
+						<span class="board-author">1</span>
 						<span class="board-good">10</span>
 						<span class="board-readCount">10</span>
 					</li>
@@ -319,7 +323,7 @@
 				</div>
 				<div class="form-group">
 					<label>추천수:</label>
-					<p id="boardDetailRecommend" value ="">0</p>
+					<p id="boardDetailRecommend" value="">0</p>
 					<button class="btn btn-primary custom-recommend-btn" onclick="recommend()">
 						<i class="recommend"></i> 추천하기
 					</button>
@@ -333,7 +337,7 @@
 			<!-- 게시판 작성  -->
 			<div id="boardWritePage" style="display: none;">
 				<h2>게시글 작성</h2>
-				<input type="hidden" id="createUserId" th:if="${loginUser != null}" th:value="${loginUser.userId}">
+				<input type="hidden" id="boardCreateUserId" th:if="${loginUser != null}" th:value="${loginUser.userId}">
 				<div class="form-group">
 					<label for="categorySelect">카테고리:</label>
 					<select id="categorySelect">

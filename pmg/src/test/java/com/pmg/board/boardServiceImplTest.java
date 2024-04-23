@@ -5,6 +5,9 @@ import java.util.List;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
 import com.pmg.PmgApplicationTests;
@@ -23,7 +26,7 @@ public class boardServiceImplTest extends PmgApplicationTests {
 	BoardService boardService;
 	@Autowired
 	BoardImageService boardImageService;
-	
+
 	@Test
 	@Transactional
 	@Disabled
@@ -32,7 +35,7 @@ public class boardServiceImplTest extends PmgApplicationTests {
 		List<BoardCategory> categories = boardService.findCategories();
 		System.out.println("카테고리 확인 --> " + categories);
 	}
-	
+
 	@Test
 	@Transactional
 	@Disabled
@@ -43,10 +46,10 @@ public class boardServiceImplTest extends PmgApplicationTests {
 		String userId = "test1";
 		image.setBoardId(1L);
 		image.setImageName("imageTest1");
-		Board board = boardService.createBoard(dto,image,userId);
+		Board board = boardService.createBoard(dto, image, userId);
 		System.out.println("게시글 작성 확인 --> :" + board);
 	}
-	
+
 	@Test
 	@Transactional
 	@Disabled
@@ -54,7 +57,7 @@ public class boardServiceImplTest extends PmgApplicationTests {
 	void deleteBoard() {
 		boardService.deleteBoard(1L);
 	}
-	
+
 	@Test
 	@Transactional
 	@Disabled
@@ -65,19 +68,16 @@ public class boardServiceImplTest extends PmgApplicationTests {
 		Board board = boardService.updateBoard(boardId, dto);
 		System.out.println("게시글 수정 확인 -->" + board);
 	}
-	
-	/*
-	 * @Test
-	 * 
-	 * @Transactional
-	 * 
-	 * @Disabled
-	 * 
-	 * @Rollback(false) void findBoardList() { List<Board> boardList =
-	 * boardService.findBoardListByDesc();
-	 * System.out.println("게시글 리스트 확인 -->"+boardList); }
-	 */
-	
+
+	@Test
+	@Transactional
+	@Disabled
+	@Rollback(false)
+	void findBoardList() {
+		List<Board> boardList = boardService.findBoardListByDesc();
+		System.out.println("게시글 리스트 확인 -->" + boardList);
+	}
+
 	@Test
 	@Transactional
 	@Disabled
@@ -87,12 +87,12 @@ public class boardServiceImplTest extends PmgApplicationTests {
 		Board board = boardService.findBoardByBoardId(boardId);
 		System.out.println("게시글 조회 --> " + board);
 		if (board != null && board.getUser() != null) {
-		    System.out.println("게시글 작성자 --> " + board.getUser().getUserId());
+			System.out.println("게시글 작성자 --> " + board.getUser().getUserId());
 		} else {
-		    System.out.println("게시글 작성자 정보 없음");
+			System.out.println("게시글 작성자 정보 없음");
 		}
 	}
-	
+
 	@Test
 	@Transactional
 	@Disabled
@@ -102,15 +102,34 @@ public class boardServiceImplTest extends PmgApplicationTests {
 		BoardImage image = boardImageService.boardImageByBoardId(boardId);
 		System.out.println("이미지 확인 -->" + image);
 	}
+
+	@Test
+	@Transactional
+	@Disabled
+	@Rollback(false)
+	void userId() {
+		Long boardId = 5L;
+		String userId = boardService.findUserIdByBoardId(boardId);
+		System.out.println("유저 확인 -->" + userId);
+	}
 	
 	@Test
 	@Transactional
 	//@Disabled
 	@Rollback(false)
-	void userId() {
-		Long boardId = 5L;
-		String userId =boardService.findUserIdByBoardId(boardId);
-		System.out.println("유저 확인 -->" + userId);
+	void page() {
+		Pageable pageable = PageRequest.of(1,5);
+		Page<Board> boardPage = boardService.getBoardList(pageable);
+		System.out.println("페이지 번호 : " + boardPage.getNumber());
+		System.out.println("페이지 수 : " + boardPage.getTotalPages());
+		System.out.println("총 데이터 : " + boardPage.getTotalElements());
+		
+		List<Board> boards = boardPage.getContent();
+		System.out.println("페이지에 포함된 데이터 수"+boards.size());
+		for(Board board : boards) {
+			System.out.println("게시글 제목:"+board.getBoardTitle());
+		}
+		
 	}
-	
+
 }

@@ -21,7 +21,7 @@ public interface BoardService {
 	//게시글 수정
 	public Board updateBoard(Long boardId, BoardDto boardDto);
 	//게시글 조회(최신순)
-	//public List<Board> findBoardListByDesc();
+	public List<Board> findBoardListByDesc();
 	//게시글 조회(오래된순)
 	public List<Board> findBoardListByAsc();
 	//게시글 한개 조회

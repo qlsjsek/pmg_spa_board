@@ -75,10 +75,11 @@ public class BoardServiceImpl implements BoardService {
 		}
 	}
 
-	/*
-	 * @Override public List<Board> findBoardListByDesc() { return
-	 * boardRepository.findAllByOrderByCreatedTimeDesc(); }
-	 */
+	@Override
+	public List<Board> findBoardListByDesc() {
+		return boardRepository.findAllByOrderByCreatedTimeDesc();
+	}
+
 	@Override
 	public List<Board> findBoardListByAsc() {
 		return boardRepository.findAllByOrderByCreatedTimeAsc();

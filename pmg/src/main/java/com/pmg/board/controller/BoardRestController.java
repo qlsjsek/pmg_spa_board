@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,8 +38,8 @@ public class BoardRestController {
 	private BoardService boardService;
 	@Autowired
 	private BoardImageService boardImageService;
-	
-	//게시글 작성
+
+	// 게시글 작성
 	@PostMapping("/create")
 	public ResponseEntity<String> createBoard(@RequestParam(value = "boardImage", required = false) MultipartFile file,
 			@RequestParam("categoryId") Long categoryId, @RequestParam("boardTitle") String boardTitle,
@@ -68,8 +69,8 @@ public class BoardRestController {
 		boardService.createBoard(boardDto, boardImageDto, userId);
 		return ResponseEntity.ok("게시글 작성 성공");
 	}
-	
-	//게시글 삭제
+
+	// 게시글 삭제
 	@DeleteMapping("/delete/{boardId}")
 	public ResponseEntity<String> deleteBoard(@PathVariable("boardId") Long boardId) {
 		Board board = boardService.findBoardByBoardId(boardId);
@@ -81,7 +82,7 @@ public class BoardRestController {
 		}
 	}
 
-	//게시글 수정
+	// 게시글 수정
 	@PutMapping("/update/{boardId}")
 	public ResponseEntity<String> updateBoard(@PathVariable("boardId") Long boardId, @RequestBody BoardDto boardDto) {
 		Board board = boardService.findBoardByBoardId(boardId);
@@ -94,8 +95,8 @@ public class BoardRestController {
 			return ResponseEntity.ok("게시글 업데이트 성공!");
 		}
 	}
-	
-	//게시글 상세조회
+
+	// 게시글 상세조회
 	@GetMapping("/detail/{boardId}")
 	public ResponseEntity<Board> boardDetail(@PathVariable("boardId") Long boardId) {
 		Board board = boardService.findBoardByBoardId(boardId);
@@ -106,90 +107,91 @@ public class BoardRestController {
 		}
 	}
 
-	//카테고리별 게시글
+	// 카테고리별 게시글
 	@GetMapping("/category/{categoryId}")
 	public ResponseEntity<List<Board>> boardByCategoryId(@PathVariable("categoryId") Long categoryId) {
 		List<Board> boards = boardService.findBoardByCategoryIdByDesc(categoryId);
 		return new ResponseEntity<>(boards, HttpStatus.OK);
 	}
 
-	//게시글 검색
+	// 게시글 검색
 	@GetMapping("/searchByTitle")
 	public ResponseEntity<List<Board>> searchByTitle(@RequestParam String keyword) {
 		List<Board> searchBoard = boardService.searchByTitle(keyword);
 		return new ResponseEntity<>(searchBoard, HttpStatus.OK);
 	}
-	
-	//페이징
+
+	// 페이징
 	@GetMapping("/boards")
-	public Page<Board> getBoardList(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "5") int size) {
+	public ResponseEntity<Page<Board>> getBoardList(@RequestParam(defaultValue = "0", name = "page") int page,
+			@RequestParam(defaultValue = "5", name = "size") int size) {
 		PageRequest pageable = PageRequest.of(page, size);
-		return boardService.getBoardList(pageable);
+		Page<Board> boardPage = boardService.getBoardList(pageable);
+		return ResponseEntity.ok().cacheControl(CacheControl.noCache()).body(boardPage);
 	}
 
-	//이미지조회
+	// 이미지조회
 	@GetMapping("/image/{boardId}")
 	public ResponseEntity<BoardImage> getBoardImageByBoardId(@PathVariable("boardId") Long boardId) {
 		BoardImage boardImage = boardImageService.boardImageByBoardId(boardId);
 		return ResponseEntity.ok(boardImage);
 	}
 
-	//조회수
+	// 조회수
 	@GetMapping("/readCount/{boardId}")
 	public ResponseEntity<String> increaseReadCount(@PathVariable("boardId") Long boardId) {
 		boardService.increaseReadCount(boardId);
 		return ResponseEntity.ok("조회수 증가 성공");
 	}
 
-	//추천
+	// 추천
 	@PutMapping("/recommend/{boardId}")
 	public ResponseEntity<String> updateRecommendCount(@PathVariable("boardId") Long boardId,
 			@RequestParam("boardRecommend") int boardRecommend) {
 		boardService.updateRecommendCount(boardId, boardRecommend);
 		return ResponseEntity.ok("게시글 추천 성공~");
 	}
-	/*
-	 * //정렬
-	 * 
-	 * @GetMapping("/sorting") public List<Board> getBoards(@RequestParam("sorting")
-	 * String sorting) { if ("createdTimeDesc".equals(sorting)) { return
-	 * boardService.findBoardListByDesc(); } else if
-	 * ("createdTimeAsc".equals(sorting)) { return
-	 * boardService.findBoardListByAsc(); } else { return
-	 * boardService.findBoardListByDesc(); } }
-	 */
-	
-	//userId찾기
-    @GetMapping("/userId/{boardId}")
-    public ResponseEntity<String> findUserIdByBoardId(@PathVariable("boardId") Long boardId) {
-        String userId = boardService.findUserIdByBoardId(boardId);
-        
-        if (userId != null) {
-            return ResponseEntity.ok(userId);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 아이디를 찾을 수 없습니다: " + boardId);
-        }
-    }
-    
-    //categoryName찾기
-    @GetMapping("/categoryName/{boardId}")
-    public ResponseEntity<String> findBoardCategoryNameByBoardId(@PathVariable("boardId") Long boardId) {
-    	String categoryName = boardService.findCategoryNameByBoardId(boardId);
-    	if (categoryName != null) {
+
+	// 정렬
+	@GetMapping("/sorting")
+	public List<Board> getBoards(@RequestParam("sorting") String sorting) {
+		if ("createdTimeDesc".equals(sorting)) {
+			return boardService.findBoardListByDesc();
+		} else if ("createdTimeAsc".equals(sorting)) {
+			return boardService.findBoardListByAsc();
+		} else {
+			return boardService.findBoardListByDesc();
+		}
+	}
+
+	// userId찾기
+	@GetMapping("/userId/{boardId}")
+	public ResponseEntity<String> findUserIdByBoardId(@PathVariable("boardId") Long boardId) {
+		String userId = boardService.findUserIdByBoardId(boardId);
+
+		if (userId != null) {
+			return ResponseEntity.ok(userId);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 아이디를 찾을 수 없습니다: " + boardId);
+		}
+	}
+
+	// categoryName찾기
+	@GetMapping("/categoryName/{boardId}")
+	public ResponseEntity<String> findBoardCategoryNameByBoardId(@PathVariable("boardId") Long boardId) {
+		String categoryName = boardService.findCategoryNameByBoardId(boardId);
+		if (categoryName != null) {
 			return ResponseEntity.ok(categoryName);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 카테고리를 찾을 수 없습니다: " + boardId);
 		}
-    }
-    
-    //추천수 찾기
-    @GetMapping("/recommendCount/{boardId}")
-    public ResponseEntity<Integer> findBoardRecommendCountByBoardId(@PathVariable("boardId") Long boardId) {
-    	int recommendCount = boardService.findRecommendCountByBoardId(boardId);
-    	return ResponseEntity.ok(recommendCount);
-    }
-    
-    
+	}
+
+	// 추천수 찾기
+	@GetMapping("/recommendCount/{boardId}")
+	public ResponseEntity<Integer> findBoardRecommendCountByBoardId(@PathVariable("boardId") Long boardId) {
+		int recommendCount = boardService.findRecommendCountByBoardId(boardId);
+		return ResponseEntity.ok(recommendCount);
+	}
 
 }

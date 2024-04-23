@@ -109,7 +109,6 @@ function updateUser() {
 	var address = document.getElementById('updateUserAddress').value;
 	var email = document.getElementById('updateUserEmail').value;
 	var phone = document.getElementById('updateUserPhone').value;
-
 	if (!password || !confirmPassword) {
 		alert('변경할 비밀번호를 입력해주세요');
 		return;
@@ -142,8 +141,9 @@ function updateUser() {
 			if (response.ok) {
 				alert('회원 정보 업데이트 성공');
 				checkConfirmPassword = false;
-				document.getElementById('editProfilePage').style.display = 'none';
-				document.getElementById('profilePage').style.display = 'block';
+				//document.getElementById('editProfilePage').style.display = 'none';
+				//document.getElementById('profilePage').style.display = 'block';
+				location.reload();
 			} else {
 				throw new Error('회원 정보 업데이트 실패');
 			}
@@ -155,18 +155,32 @@ function updateUser() {
 }
 
 //회원정보수정 비밀번호 인증
+let isPasswordConfirmed = false;
 function confirmPassword() {
 	var beforeUpdateUserPasswordInput = document.getElementById('beforeUpdateUserPassword');
+	var updatePasswordInput = document.getElementById('updatePassword');
+	var updateConfirmPasswordInput = document.getElementById('updateConfirmPassword');
+	var updateUserPhoneInput = document.getElementById('updateUserPhone');
+	var updateUserAddressInput = document.getElementById('updateUserAddress');
+	var updateUserEmailInput = document.getElementById('updateUserEmail');
 	var userId = document.getElementById('updateUserId').value;
-	var confirmUserPassword = document.getElementById('confirmUserPassword').value;
 	var userPassword = document.getElementById('beforeUpdateUserPassword').value;
-	console.log(userPassword);
-	console.log(confirmUserPassword);
+
 	if (!userPassword) {
 		alert('비밀번호를 입력해주세요');
 		return;
 	}
-	fetch(`/api/user/confirm/${userId}/${userPassword}`)
+
+	fetch('/api/user/confirm', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
+		body: new URLSearchParams({
+			userId: userId,
+			userPassword: userPassword
+		}).toString()
+	})
 		.then(response => {
 			if (response.ok) {
 				return response.json();
@@ -175,34 +189,34 @@ function confirmPassword() {
 			}
 		})
 		.then(data => {
-			if (data === true) {
-				if (userPassword === confirmUserPassword) {
-					alert('비밀번호가 일치합니다. 인증 성공!');
-					checkConfirmPassword = true;
-					beforeUpdateUserPasswordInput.disabled = true;
-
-				} else {
-					alert('비밀번호가 일치하지 않습니다.');
-					checkConfirmPassword = false;
-				}
+			if (data == true) {
+				alert('비밀번호가 일치합니다. 인증 성공!');
+				isPasswordConfirmed = true;
+				beforeUpdateUserPasswordInput.disabled = true;
+				updateConfirmPasswordInput.disabled = false;
+				updatePasswordInput.disabled = false;
+				updateUserPhoneInput.disabled = false;
+				updateUserAddressInput.disabled = false;
+				updateUserEmailInput.disabled = false;
+				checkConfirmPassword = true;
 			} else {
 				alert('비밀번호가 일치하지 않습니다.');
-				checkConfirmPassword = false;
+				isPasswordConfirmed = false;
+				beforeUpdateUserPasswordInput.disabled = false;
 			}
 		})
 		.catch(error => {
 			console.error('Error: ', error);
 			alert('비밀번호 인증 실패');
+			isPasswordConfirmed = false;
+			beforeUpdateUserPasswordInput.disabled = false;
 		});
 }
-
-
 
 //로그인
 function login() {
 	var userId = document.getElementById('loginUserId').value;
 	var userPassword = document.getElementById('loginUserPassword').value;
-	console.log(userPassword);
 	if (!userId || !userPassword) {
 		alert("아이디와 비밀번호를 입력하세요.");
 		return;
@@ -210,8 +224,7 @@ function login() {
 	var loginData = {
 		userId: userId,
 		userPassword: userPassword
-	};
-
+	}
 	fetch('/api/user/login', {
 		method: 'POST',
 		headers: {
