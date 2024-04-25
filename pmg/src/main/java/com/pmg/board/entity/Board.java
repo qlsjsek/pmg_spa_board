@@ -74,5 +74,6 @@ public class Board {
 	
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
 	@ToString.Exclude
+	@JsonIgnore
 	private List<BoardReply> boardReplies;
 }

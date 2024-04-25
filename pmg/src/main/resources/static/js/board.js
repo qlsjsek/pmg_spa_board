@@ -6,7 +6,6 @@ function createBoard() {
 	var boardContent = document.getElementById('boardContent').value;
 	var boardImage = document.getElementById('boardImage').files[0];
 	var userId = document.getElementById('boardCreateUserId').value;
-	console.log(userId);
 
 	if (!boardTitle) {
 		alert('제목을 입력해주세요');
@@ -47,15 +46,12 @@ function createBoard() {
 //게시글 상세페이지
 function goToBoardDetail(event) {
 	const boardId = event.target.getAttribute('data-board-id');
-
 	findUserIdByBoardId(boardId)
 		.then(userId => {
-			console.log('게시물 작성자 userId:', userId);
 
 			const userIdElement = document.getElementById('detailUserId');
 			const detailUserId = userIdElement ? userIdElement.value : null;
 
-			console.log('detailUserId:', detailUserId);
 
 			if (detailUserId !== userId) {
 				document.getElementById('updateBtn').style.display = 'none';
@@ -161,7 +157,6 @@ function findBoardImage() {
 //게시글 삭제
 function deleteBoard() {
 	var boardId = document.getElementById('boardDetailId').value;
-	console.log(boardId);
 
 	if (!confirm('정말 이 게시글을 삭제하시겠습니까?')) {
 		return;
@@ -566,7 +561,6 @@ function recommend() {
 						localStorage.setItem(recommendedKey, 'true');
 					}
 					recommendElement.innerText = recommendCount;
-					console.log(recommendElement);
 					fetch(`/api/board/recommend/${boardId}?boardRecommend=${recommendCount}`, {
 						method: 'PUT',
 					})

@@ -115,5 +115,6 @@ function goToBoardRestList() {
 	restBoardByCategoryId();
 }
 function goToBoardDetail1() {
+	replyList();
 	goToPage('boardDetailPage');
 }

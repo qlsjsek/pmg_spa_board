@@ -332,12 +332,23 @@
 					<button id="updateBtn" onclick="goToEditBoard()">수정하기</button>
 					<button id="deleteBtn" onclick="deleteBoard()">삭제하기</button>
 				</div>
-
+				<hr>
+				<div class="row comment-heading">
+					<div class="col-md-12">
+						<div class="form-group">
+							<h3>댓글</h3>
+						</div>
+					</div>
+				</div>
+				<hr>
 				<div id="commentList" class="row">
 					<div class="col-md-12">
 						<div class="comment">
-							<strong>사용자1 (userId1):</strong><p> 댓글 내용이 여기에 표시됩니다.</p><span class="timestamp">2024-04-25
+							<input type="text" id="boardReplyId">
+							<strong id="replyUserId">사용자1</strong>
+							<p id="replyContent">내용</p><span class="createdTime">2024-04-25
 								14:30</span>
+							<button id="replyDeleteBtn" class="btn btn-primary" onclick="deleteReply()">삭제하기</button>
 						</div>
 						<hr>
 					</div>
@@ -346,7 +357,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
-							<h3>댓글</h3>
+							<textarea id="boardReplyContent" class="form-control" rows="4"></textarea>
 						</div>
 					</div>
 				</div>
@@ -354,15 +365,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
-							<textarea id="replyContent" class="form-control" rows="4"></textarea>
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group">
-							<button class="btn btn-primary" onclick="postReply()">댓글 등록</button>
+							<button class="btn btn-primary" onclick="createReply()">댓글 등록</button>
 						</div>
 					</div>
 				</div>
@@ -419,6 +422,7 @@
 <script src="js/common.js"></script>
 <script src="js/user.js"></script>
 <script src="js/board.js"></script>
+<script src="js/boardReply.js"></script>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

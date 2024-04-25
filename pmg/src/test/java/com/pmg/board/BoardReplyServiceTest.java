@@ -1,5 +1,7 @@
 package com.pmg.board;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,4 +30,35 @@ public class BoardReplyServiceTest extends PmgApplicationTests{
 		BoardReply reply = boardReplyService.createReply(replyDto);
 		System.out.println("댓글생성확인:"+reply);
 	}
+	
+	@Test
+	@Transactional
+	@Disabled
+	@Rollback(false)
+	void deleteReply() {
+		Long boardReplyId = 5L;
+		boardReplyService.deleteReply(boardReplyId);
+	}
+	
+	@Test
+	@Transactional
+	@Disabled
+	@Rollback(false)
+	void updateReply() {
+		Long boardReplyId = 6L;
+		BoardReplyDto reply = new BoardReplyDto();
+		reply.setBoardReplyContent("updateTest1");
+		boardReplyService.updateReply(reply, boardReplyId);
+	}
+	
+	@Test
+	@Transactional
+	//@Disabled
+	@Rollback(false)
+	void replyList() {
+		Long boardId= 1L;
+		List<BoardReply> replies = boardReplyService.findReplyByBoardId(boardId);
+		System.out.println("댓글 리스트 확인:" +replies);
+	}
+	
 }

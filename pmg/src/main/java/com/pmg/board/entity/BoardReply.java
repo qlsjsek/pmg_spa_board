@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pmg.board.dto.BoardReplyDto;
 import com.pmg.user.entity.User;
 
@@ -43,13 +44,15 @@ public class BoardReply {
 	}
 	
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_id")
+	@JsonIgnore
 	@ToString.Exclude
 	private Board board;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	@ToString.Exclude
 	private User user;
 	
