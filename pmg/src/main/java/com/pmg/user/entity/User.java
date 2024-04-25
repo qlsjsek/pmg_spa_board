@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.pmg.board.entity.Board;
+import com.pmg.board.entity.BoardReply;
 import com.pmg.user.dto.UserDto;
 
 import jakarta.persistence.CascadeType;
@@ -57,4 +58,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Board> boards;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<BoardReply> boardReplies;
 }

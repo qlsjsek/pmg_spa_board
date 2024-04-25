@@ -21,7 +21,7 @@ import com.pmg.board.service.BoardService;
 
 import jakarta.transaction.Transactional;
 
-public class boardServiceImplTest extends PmgApplicationTests {
+public class BoardServiceImplTest extends PmgApplicationTests {
 	@Autowired
 	BoardService boardService;
 	@Autowired

@@ -680,9 +680,7 @@ function displaySortedBoardList(sortedBoards) {
 
 //페이징
 function fetchAndDisplayBoardList(page, size) {
-	const url = `/api/board/boards?page=${page}&size=${size}&_=${Date.now()}`;
-
-	fetch(url)
+	fetch(`/api/board/boards?page=${page}&size=${size}&_=${Date.now()}`)
 		.then(response => {
 			if (!response.ok) {
 				throw new Error('게시글 목록을 가져오는데 실패했습니다.');
