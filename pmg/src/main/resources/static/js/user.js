@@ -275,7 +275,6 @@ function logout() {
 //회원탈퇴
 function deleteUser() {
 	var id = document.getElementById('id').value;
-	console.log(id);
 	fetch('/api/user/delete/' + id, {
 		method: 'DELETE',
 		headers: {
@@ -296,6 +295,33 @@ function deleteUser() {
 		.catch(error => {
 			console.error('회원 탈퇴 요청 실패 : ', error);
 		})
+}
+//soft delete 회원탈퇴
+function softDeleteUser() {
+	var id = document.getElementById('id').value;
+	var confirmed = confirm('정말 탈퇴하시겠습니까?');
+	if (confirmed) {
+		fetch(`/api/user/softDelete/${id}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ id: id })
+		})
+			.then(response => {
+				if (response.ok) {
+					alert('회원탈퇴 성공');
+					logout();
+				} else {
+					alert('회원탈퇴 실패');
+				}
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	} else {
+		alert('취소되었습니다');
+	}
 }
 
 //아이디 찾기
@@ -343,7 +369,8 @@ function findUserId() {
 		});
 }
 
-//비밀번호 찾기
+
+
 function findUserPassword() {
 	var userId = document.getElementById('findUserId').value;
 	var userPhone = document.getElementById('findUserPwPhone').value;
@@ -356,36 +383,75 @@ function findUserPassword() {
 		alert('핸드폰 번호를 입력해주세요');
 		return;
 	}
-	var url = new URL(`/api/user/find/userPassword`, window.location.origin);
-	url.searchParams.append('userId', userId);
-	url.searchParams.append('userPhone', userPhone);
 
-	fetch(url, {
+	fetch('/api/user/find/userPassword?userId=' + userId + '&userPhone=' + userPhone, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json'
 		}
 	})
 		.then(response => {
-			if (response.status === 200) {
-				return response.text();
+			if (response.ok) {
+				return response.json();
 			} else {
-				return Promise.reject('해당 아이디를 찾을 수 없습니다.');
+				throw new Error('인증 실패');
 			}
 		})
 		.then(data => {
-			alert('회원님의 비밀번호는 : ' + data + ' 입니다.');
-			document.getElementById("findUserId").value = '';
-			document.getElementById("findUserPwPhone").value = '';
-			document.getElementById('forgotPasswordForm').style.display = 'none';
-			document.getElementById('loginPage').style.display = 'block';
+			if (data === true) {
+				alert('인증이 확인되었습니다. 비밀번호를 재설정 해주세요');
+				document.getElementById('resetPassword').style.visibility = 'visible';
+				document.getElementById('confirmResetPassword').style.visibility = 'visible';
+				document.getElementById('resetPasswordBtn').style.visibility = 'visible';
+				document.getElementById('findUserId').readOnly = true;
+				document.getElementById('findUserPwPhone').readOnly = true;
+			} else {
+				alert('정보가 일치하지 않습니다');
+			}
 		})
 		.catch(error => {
-			alert('해당 아이디를 찾을 수 없습니다');
-			console.error('Error : ' + error);
-			document.getElementById("findUserId").value = '';
-			document.getElementById("findUserPwPhone").value = '';
+			console.error(error);
 		});
 }
 
+function resetUserPassword() {
+	var userId = document.getElementById('findUserId').value;
+	var userPhone = document.getElementById('findUserPwPhone').value;
+	var resetPassword = document.getElementById('resetPassword').value;
+	var confirmResetPassword = document.getElementById('confirmResetPassword').value;
+
+	if (resetPassword !== confirmResetPassword) {
+		alert('비밀번호가 일치하지 않습니다');
+		return;
+	}
+
+	var requestBody = {
+		userId: userId,
+		userPhone: userPhone,
+		userPassword: resetPassword
+	};
+	fetch(`/api/user/reset?userId=${userId}&userPhone=${userPhone}&userPassword=${resetPassword}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(requestBody)
+	})
+		.then(response => {
+			if (response.ok) {
+				return response.text();
+
+			} else {
+				throw new Error('비밀번호 재설정 실패');
+			}
+		})
+		.then(data => {
+			alert(data);
+			location.reload();
+		})
+		.catch(error => {
+			console.error(error);
+		});
+
+}
 

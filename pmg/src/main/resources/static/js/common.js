@@ -39,27 +39,57 @@ function resetFormState() {
 	var updateUserPhoneInput = document.getElementById('updateUserPhone');
 	var updateUserAddressInput = document.getElementById('updateUserAddress');
 	var updateUserEmailInput = document.getElementById('updateUserEmail');
-    if (beforeUpdateUserPasswordInput) {
-        beforeUpdateUserPasswordInput.value = "";
-        beforeUpdateUserPasswordInput.disabled = false;
-    }
-    if (updatePasswordInput) {
-        updatePasswordInput.value = "";
-        updatePasswordInput.disabled = true;
-    }
-    if (updateConfirmPasswordInput) {
-        updateConfirmPasswordInput.value = "";
-        updateConfirmPasswordInput.disabled = true;
-    }
-    if (updateUserPhoneInput) {
-        updateUserPhoneInput.disabled = true;
-    }
-    if (updateUserAddressInput) {
-        updateUserAddressInput.disabled = true;
-    }
-    if (updateUserEmailInput) {
-        updateUserEmailInput.disabled = true;
-    }
+	var findUserpasswordUserIdInput = document.getElementById('findUserId');
+	var findUserpasswordUserPhoneInput = document.getElementById('findUserPwPhone');
+
+	var resetPasswordInput = document.getElementById('resetPassword');
+	var confirmResetPasswordInput = document.getElementById('confirmResetPassword');
+	var resetPasswordBtn = document.getElementById('resetPasswordBtn');
+	if (beforeUpdateUserPasswordInput) {
+		beforeUpdateUserPasswordInput.value = "";
+		beforeUpdateUserPasswordInput.disabled = false;
+	}
+	if (updatePasswordInput) {
+		updatePasswordInput.value = "";
+		updatePasswordInput.disabled = true;
+	}
+	if (updateConfirmPasswordInput) {
+		updateConfirmPasswordInput.value = "";
+		updateConfirmPasswordInput.disabled = true;
+	}
+	if (updateUserPhoneInput) {
+		updateUserPhoneInput.disabled = true;
+	}
+	if (updateUserAddressInput) {
+		updateUserAddressInput.disabled = true;
+	}
+	if (updateUserEmailInput) {
+		updateUserEmailInput.disabled = true;
+	}
+	if (findUserpasswordUserIdInput) {
+		findUserpasswordUserIdInput.value = "";
+		document.getElementById('findUserId').readOnly = false;
+	}
+	if (findUserpasswordUserPhoneInput) {
+		findUserpasswordUserPhoneInput.value = "";
+		document.getElementById('findUserPwPhone').readOnly = false;
+	}
+
+	if (resetPasswordInput) {
+		resetPasswordInput.value = "";
+		document.getElementById('resetPassword').style.visibility = 'hidden';
+	}
+	if (confirmResetPasswordInput) {
+		confirmResetPasswordInput.value = "";
+		document.getElementById('confirmResetPassword').style.visibility = 'hidden';
+	}
+	if (resetPasswordBtn) {
+		document.getElementById('resetPasswordBtn').style.visibility = 'hidden';
+	}
+
+
+
+
 }
 function goToLogin() {
 	goToPage('loginPage');

@@ -96,23 +96,11 @@ public class UserServiceImpl implements UserService {
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			if (user == null) {
-			/*	
-				UserNotFoundException exception = new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
-				exception.setData(User.builder().userId(userId).userPassword(userPassword).build());
-				throw exception;
-			*/
 				throw new UserNotFoundException(userId + " 는 존재하지 않는 아이디입니다.");
 			}
 			String encryPtedPassword = user.getUserPassword();
 			boolean passwordMatches = passwordEncoder.matches(userPassword, encryPtedPassword);
-		/*
-			String userPw = user.getUserPassword();
-			if (!userPw.equals(userPassword)) {
-				PasswordMismatchException exception = new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
-				exception.setData(User.builder().userId(userId).userPassword(userPassword).build());
-				throw exception;
-			}
-			*/
+
 			if(!passwordMatches) {
 				throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
 			}
@@ -173,6 +161,24 @@ public class UserServiceImpl implements UserService {
 	    } else {
 	        throw new UserNotFoundException(userId + "는 존재하지 않는 사용자입니다");
 	    }
+	}
+
+	@Override
+	public void softDeleteUser(Long id) {
+		Optional<User> optionalUser = userRepository.findById(id);
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			user.setDeleted(true);
+			userRepository.save(user);
+		} else {
+			throw new RuntimeException("사용자를 찾을 수 없습니다 : "+id);
+		}
+	}
+
+	@Override
+	public boolean isConfirmByUserIdAndUserPhone(String userId, String userPhone) {
+		Optional<User> optionalUser = userRepository.findByUserIdAndUserPhone(userId, userPhone);
+		return optionalUser.isPresent();
 	}
 
 }

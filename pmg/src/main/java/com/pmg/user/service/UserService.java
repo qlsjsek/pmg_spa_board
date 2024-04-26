@@ -27,6 +27,11 @@ public interface UserService {
 	public String findUserPasswordByUserIdAndUserPhone(String userId, String userPhone);
 	//비밀번호 찾기 security버전
 	public User resetUserPasswordByUserIdAndUserPhone(String userId, String userPhone, String newPassword);
+	//비밀번호 찾기 전 인증
+	public boolean isConfirmByUserIdAndUserPhone(String userId, String userPhone);
+	
+	//soft delete
+	public void softDeleteUser(Long id);
 	
 	
 }

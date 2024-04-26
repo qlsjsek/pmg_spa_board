@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pmg.board.dto.BoardDto;
@@ -31,16 +33,20 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SQLDelete(sql = "UPDATE board SET deleted = true WHERE boardId = ?")
+@Where(clause = "deleted = false")
 public class Board {
 	@Id
 	@SequenceGenerator(name = "BOARD_BOARD_NO_SEQ",sequenceName = "BOARD_BOARD_NO_SEQ",initialValue = 1,allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false)
 	private Long boardId;
 	private String boardTitle;
 	@Column(columnDefinition = "CLOB")
 	private String boardContent;
 	private int boardReadCount;
 	private int boardRecommend;
+	private boolean deleted = Boolean.FALSE;
 	
 	@CreationTimestamp
 	private LocalDateTime createdTime;

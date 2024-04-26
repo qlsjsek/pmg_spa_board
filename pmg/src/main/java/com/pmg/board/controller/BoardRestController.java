@@ -201,5 +201,11 @@ public class BoardRestController {
 		PageRequest pageable = PageRequest.of(page, size);
 		return boardService.getBoardsByCategoryId(categoryId, pageable);
 	}
+	
+	@DeleteMapping("/softDelete/{boardId}")
+	public ResponseEntity<String> softDeleteBoard(@PathVariable("boardId") Long boardId) {
+		boardService.softDeleteBoard(boardId);
+		return new ResponseEntity<>("삭제 성공",HttpStatus.OK);
+	}
 
 }

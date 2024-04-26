@@ -4,12 +4,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import com.pmg.board.entity.Board;
 import com.pmg.board.entity.BoardReply;
 import com.pmg.user.dto.UserDto;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,10 +32,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SQLDelete(sql = "UPDATE userentity SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false)
 	private Long id; 
 	private String userId;
 	private String userPassword;
@@ -41,6 +47,8 @@ public class User {
 	private String userPhone;
 	private String userEmail;
 	private String userBirthDate;
+	
+	private boolean deleted = Boolean.FALSE;
 	
 	@CreationTimestamp
 	private LocalDateTime createdTime;

@@ -123,7 +123,19 @@ public class UserRestController {
 		userService.resetUserPasswordByUserIdAndUserPhone(userId,userPhone,userPassword);
 		return ResponseEntity.ok("비밀번호가 재설정 되었습니다.");
 	}
+	@GetMapping("/find/userPassword")
+	public ResponseEntity<Boolean> isConfirmByUserIdAndUserPhone(@RequestParam("userId") String userId, @RequestParam("userPhone") String userPhone) {
+		boolean isMatch = userService.isConfirmByUserIdAndUserPhone(userId, userPhone);
+		return ResponseEntity.ok(isMatch);
+	}
 	
+	
+	//soft delete
+	@DeleteMapping("/softDelete/{id}")
+	public ResponseEntity<String> softDeleteUser(@PathVariable("id") Long id) {
+		userService.softDeleteUser(id);
+		return new ResponseEntity<>("삭제완료",HttpStatus.OK);
+	}
 	
 	
 }

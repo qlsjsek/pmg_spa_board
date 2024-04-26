@@ -45,4 +45,7 @@ public interface BoardService {
 	//categoryId로 리스트, 페이징
 	public Page<Board> getBoardsByCategoryId(Long categoryId, Pageable pageable);
 	
+	//soft delete
+	public void softDeleteBoard(Long boardId);
+	
 }

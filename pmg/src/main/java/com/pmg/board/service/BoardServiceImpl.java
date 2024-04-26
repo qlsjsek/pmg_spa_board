@@ -169,4 +169,16 @@ public class BoardServiceImpl implements BoardService {
 		return boardRepository.findAllByBoardCategoryCategoryIdOrderByCreatedTimeDesc(categoryId, pageable);
 	}
 
+	@Override
+	public void softDeleteBoard(Long boardId) {
+		Optional<Board> optionalBoard = boardRepository.findById(boardId);
+		if(optionalBoard.isPresent()) {
+			Board board = optionalBoard.get();
+			board.setDeleted(true);
+			boardRepository.save(board);
+		} else {
+			throw new NotFoundException("해당 게시물을 찾을 수 없습니다:"+boardId);
+		}
+	}
+
 }
